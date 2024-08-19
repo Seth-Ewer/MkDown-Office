@@ -35,25 +35,25 @@ class Photino_Window {
   Close()
 }
 
-class Facade {
+class Photino_Services {
   FileService Files
   SearchService Search
   LinksService Links
   GitService Git
 }
-Photino_Window --> Facade : Hosts Backend
-Menu_UI ..> Facade : Dependency
+Photino_Window --> Photino_Services : Hosts Backend
+Menu_UI ..> Photino_Services : Dependency
 
 class SearchService {
   MarkdownFile[] Search(string query)
 }
-Facade --> SearchService : Uses
+Photino_Services --> SearchService : Uses
 
 class LinksService {
   Links[] GetLinks(MarkdownFile file)
   Links[] GetBackLinks(MarkdownFile file)
 }
-Facade --> LinksService : Uses
+Photino_Services --> LinksService : Uses
 
 class GitService {
   void CheckIn(MarkdownFile file)
@@ -61,7 +61,7 @@ class GitService {
   void Pull();
   void Push();
 }
-Facade --> GitService : Uses
+Photino_Services --> GitService : Uses
 
 class FileService {
   string ReadFile(string path)
@@ -73,8 +73,8 @@ class FileService {
   void DeleteFolder(string path)
   void DeleteFile(string path)
 }
-Facade --> FileService : Uses
-Folder ..> FileService : Facade.Files
+Photino_Services --> FileService : Uses
+Folder ..> FileService : Photino_Services.Files
 
 class Blazor_App {
   Menu_UI Menu
@@ -90,7 +90,6 @@ class Menu_UI {
   Folder RootFolder
   Folder CurrentFolder
   MarkdownFile CurrentFile
-  Facade Facade
 }
 Blazor_App --> Menu_UI : Shows
 

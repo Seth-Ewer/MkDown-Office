@@ -1,0 +1,17 @@
+﻿@page "/"
+@using MkDownOffice.Shared
+@inject ILogger<Index> Logger;
+
+<h1>Hello, world!</h1>
+
+Welcome to your new app.
+
+<SurveyPrompt Title="How is Blazor working for you?" />
+
+@code {
+    protected override void OnInitialized()
+    {
+      var IsEnabled = Logger.IsEnabled(LogLevel.Information) ? "Logger is enabled" : "Logger is disabled";
+      Logger.LogInformation("Index page initialized");
+    }
+}
