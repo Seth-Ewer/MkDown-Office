@@ -1,36 +1,46 @@
-﻿using System;
-using System.Net.Http;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
+
+using MkDownOffice.Contracts;
+using MkDownOffice.Services;
+
 using Photino.Blazor;
+
+using System;
 
 namespace MkDownOffice
 {
-    class Program
+  class Program
+  {
+    [STAThread]
+    static void Main(string[] args)
     {
-        [STAThread]
-        static void Main(string[] args)
-        {
-            var appBuilder = PhotinoBlazorAppBuilder.CreateDefault(args);
+      var appBuilder = PhotinoBlazorAppBuilder.CreateDefault(args);
 
-            appBuilder.Services.AddLogging();
+      appBuilder.Services.AddLogging();
 
-            // register root component and selector
-            appBuilder.RootComponents.Add<App>("app");
+      // Register Core Application Services
+      appBuilder.Services.AddSingleton<IFileService, FileService>();
+      appBuilder.Services.AddSingleton<ILinkService, LinkService>();
+      appBuilder.Services.AddSingleton<ISearchService, SearchService>();
+      appBuilder.Services.AddSingleton<IGitService, GitService>();
 
-            var app = appBuilder.Build();
+      // register root component and selector
+      appBuilder.RootComponents.Add<App>("app");
 
-            // customize window
-            app.MainWindow
-                .SetIconFile("favicon.ico")
-                .SetTitle("Photino Blazor Sample");
+      var app = appBuilder.Build();
 
-            AppDomain.CurrentDomain.UnhandledException += (sender, error) =>
-            {
-                app.MainWindow.ShowMessage("Fatal exception", error.ExceptionObject.ToString());
-            };
+      // customize window
+      app.MainWindow
+          .SetIconFile("favicon.ico")
+          .SetTitle("Photino Blazor Sample");
 
-            app.Run();
+      AppDomain.CurrentDomain.UnhandledException += (sender, error) =>
+      {
+        app.MainWindow.ShowMessage("Fatal exception", error.ExceptionObject.ToString());
+      };
 
-        }
+      app.Run();
+
     }
+  }
 }

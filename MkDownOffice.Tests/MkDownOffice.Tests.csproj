@@ -1,0 +1,107 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+
+    <IsPackable>false</IsPackable>
+    <IsTestProject>true</IsTestProject>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="TestData\MarkdownFilesAndChildFolders\One\SampleFileOneOne.md" />
+    <None Remove="TestData\MarkdownFilesAndChildFolders\One\SampleFileOneThree.md" />
+    <None Remove="TestData\MarkdownFilesAndChildFolders\One\SampleFileOneTwo.md" />
+    <None Remove="TestData\MarkdownFilesAndChildFolders\SampleFileOne.md" />
+    <None Remove="TestData\MarkdownFilesAndChildFolders\SampleFileThree.md" />
+    <None Remove="TestData\MarkdownFilesAndChildFolders\SampleFileTwo.md" />
+    <None Remove="TestData\MarkdownFilesAndChildFolders\Three\SampleFileTwoOne.md" />
+    <None Remove="TestData\MarkdownFilesAndChildFolders\Three\SampleFileTwoThree.md" />
+    <None Remove="TestData\MarkdownFilesAndChildFolders\Three\SampleFileTwoTwo.md" />
+    <None Remove="TestData\MarkdownFilesAndChildFolders\Two\SampleFileThreeOne.md" />
+    <None Remove="TestData\MarkdownFilesAndChildFolders\Two\SampleFileThreeThree.md" />
+    <None Remove="TestData\MarkdownFilesAndChildFolders\Two\SampleFileTwo.md" />
+    <None Remove="TestData\OnlyChildFolders\One\SampleFile.md" />
+    <None Remove="TestData\OnlyChildFolders\Three\SampleFile.md" />
+    <None Remove="TestData\OnlyChildFolders\Two\SampleFile.md" />
+    <None Remove="TestData\OnlyMarkdownFiles\SampleFileOne.md" />
+    <None Remove="TestData\OnlyMarkdownFiles\SampleFileThree.md" />
+    <None Remove="TestData\OnlyMarkdownFiles\SampleFileTwo.md" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="TestData\MarkdownFilesAndChildFolders\One\SampleFileOneOne.md">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestData\MarkdownFilesAndChildFolders\One\SampleFileOneThree.md">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestData\MarkdownFilesAndChildFolders\One\SampleFileOneTwo.md">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestData\MarkdownFilesAndChildFolders\SampleFileThree.md">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestData\MarkdownFilesAndChildFolders\SampleFileTwo.md">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestData\MarkdownFilesAndChildFolders\SampleFileOne.md">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestData\MarkdownFilesAndChildFolders\Three\SampleFileTwoOne.md">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestData\MarkdownFilesAndChildFolders\Three\SampleFileTwoThree.md">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestData\MarkdownFilesAndChildFolders\Three\SampleFileTwoTwo.md">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestData\MarkdownFilesAndChildFolders\Two\SampleFileThreeOne.md">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestData\MarkdownFilesAndChildFolders\Two\SampleFileThreeThree.md">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestData\MarkdownFilesAndChildFolders\Two\SampleFileTwo.md">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestData\OnlyChildFolders\One\SampleFile.md">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestData\OnlyChildFolders\Three\SampleFile.md">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestData\OnlyChildFolders\Two\SampleFile.md">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestData\OnlyMarkdownFiles\SampleFileOne.md">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestData\OnlyMarkdownFiles\SampleFileThree.md">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestData\OnlyMarkdownFiles\SampleFileTwo.md">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.10.0" />
+    <PackageReference Include="xunit" Version="2.9.0" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.8.2">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="coverlet.collector" Version="6.0.2">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\MkDownOffice\MkDownOffice.csproj" />
+  </ItemGroup>
+
+</Project>
