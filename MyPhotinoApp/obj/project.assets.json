@@ -1,0 +1,181 @@
+{
+  "version": 3,
+  "targets": {
+    "net6.0": {
+      "Photino.Native/2.2.3": {
+        "type": "package",
+        "runtimeTargets": {
+          "runtimes/linux-arm64/native/Photino.Native.so": {
+            "assetType": "native",
+            "rid": "linux-arm64"
+          },
+          "runtimes/linux-x64/native/Photino.Native.so": {
+            "assetType": "native",
+            "rid": "linux-x64"
+          },
+          "runtimes/osx-arm64/native/Photino.Native.dylib": {
+            "assetType": "native",
+            "rid": "osx-arm64"
+          },
+          "runtimes/osx-x64/native/Photino.Native.dylib": {
+            "assetType": "native",
+            "rid": "osx-x64"
+          },
+          "runtimes/win-arm64/native/Photino.Native.dll": {
+            "assetType": "native",
+            "rid": "win-arm64"
+          },
+          "runtimes/win-arm64/native/WebView2Loader.dll": {
+            "assetType": "native",
+            "rid": "win-arm64"
+          },
+          "runtimes/win-x64/native/Photino.Native.dll": {
+            "assetType": "native",
+            "rid": "win-x64"
+          },
+          "runtimes/win-x64/native/WebView2Loader.dll": {
+            "assetType": "native",
+            "rid": "win-x64"
+          }
+        }
+      },
+      "Photino.NET/2.3.0": {
+        "type": "package",
+        "dependencies": {
+          "Photino.Native": "2.2.3"
+        },
+        "compile": {
+          "lib/net6.0/Photino.NET.dll": {}
+        },
+        "runtime": {
+          "lib/net6.0/Photino.NET.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "Photino.Native/2.2.3": {
+      "sha512": "YKUoUCmuNwlH+Njb5rPDTKbTU9yNQszFyZuHyczd4a6AfJNvHs/FtCx/yg9DfrQtAeAVA01qx5heujy+SjsKsA==",
+      "type": "package",
+      "path": "photino.native/2.2.3",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "photino.native.2.2.3.nupkg.sha512",
+        "photino.native.nuspec",
+        "runtimes/linux-arm64/native/Photino.Native.so",
+        "runtimes/linux-x64/native/Photino.Native.so",
+        "runtimes/osx-arm64/native/Photino.Native.dylib",
+        "runtimes/osx-x64/native/Photino.Native.dylib",
+        "runtimes/win-arm64/native/Photino.Native.dll",
+        "runtimes/win-arm64/native/WebView2Loader.dll",
+        "runtimes/win-x64/native/Photino.Native.dll",
+        "runtimes/win-x64/native/WebView2Loader.dll"
+      ]
+    },
+    "Photino.NET/2.3.0": {
+      "sha512": "XL9a7Z62Nm+56Xqn/kJ8befDWj+mDrTjGA6tdSm1i0hv9WhIACuldV36ptCFOQWVhhszYyJ5CkRL2+xw+40bJA==",
+      "type": "package",
+      "path": "photino.net/2.3.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/net6.0/Photino.NET.dll",
+        "photino.net.2.3.0.nupkg.sha512",
+        "photino.net.nuspec"
+      ]
+    }
+  },
+  "projectFileDependencyGroups": {
+    "net6.0": [
+      "Photino.NET >= 2.3.0"
+    ]
+  },
+  "packageFolders": {
+    "C:\\Users\\laiko\\.nuget\\packages\\": {}
+  },
+  "project": {
+    "version": "1.0.0",
+    "restore": {
+      "projectUniqueName": "C:\\Users\\laiko\\source\\repos\\MkDown-Office\\MkDown-Office\\MyPhotinoApp\\HelloPhotino.NET.csproj",
+      "projectName": "HelloPhotino.NET",
+      "projectPath": "C:\\Users\\laiko\\source\\repos\\MkDown-Office\\MkDown-Office\\MyPhotinoApp\\HelloPhotino.NET.csproj",
+      "packagesPath": "C:\\Users\\laiko\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\laiko\\source\\repos\\MkDown-Office\\MkDown-Office\\MyPhotinoApp\\obj\\",
+      "projectStyle": "PackageReference",
+      "configFilePaths": [
+        "C:\\Users\\laiko\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+      ],
+      "originalTargetFrameworks": [
+        "net6.0"
+      ],
+      "sources": {
+        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+        "https://api.nuget.org/v3/index.json": {}
+      },
+      "frameworks": {
+        "net6.0": {
+          "targetAlias": "net6.0",
+          "projectReferences": {}
+        }
+      },
+      "warningProperties": {
+        "warnAsError": [
+          "NU1605"
+        ]
+      },
+      "restoreAuditProperties": {
+        "enableAudit": "true",
+        "auditLevel": "low",
+        "auditMode": "direct"
+      }
+    },
+    "frameworks": {
+      "net6.0": {
+        "targetAlias": "net6.0",
+        "dependencies": {
+          "Photino.NET": {
+            "target": "Package",
+            "version": "[2.3.0, )"
+          }
+        },
+        "imports": [
+          "net461",
+          "net462",
+          "net47",
+          "net471",
+          "net472",
+          "net48",
+          "net481"
+        ],
+        "assetTargetFallback": true,
+        "warn": true,
+        "downloadDependencies": [
+          {
+            "name": "Microsoft.AspNetCore.App.Ref",
+            "version": "[6.0.33, 6.0.33]"
+          },
+          {
+            "name": "Microsoft.NETCore.App.Host.win-x64",
+            "version": "[6.0.33, 6.0.33]"
+          },
+          {
+            "name": "Microsoft.NETCore.App.Ref",
+            "version": "[6.0.33, 6.0.33]"
+          },
+          {
+            "name": "Microsoft.WindowsDesktop.App.Ref",
+            "version": "[6.0.33, 6.0.33]"
+          }
+        ],
+        "frameworkReferences": {
+          "Microsoft.NETCore.App": {
+            "privateAssets": "all"
+          }
+        },
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.401\\RuntimeIdentifierGraph.json"
+      }
+    }
+  }
+}
