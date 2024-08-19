@@ -1,6 +1,10 @@
-﻿namespace MkDownOffice.Contracts;
+﻿using MkDownOffice.Models;
 
-public interface IFileService { }
-public interface ILinkService { }
-public interface ISearchService { }
-public interface IGitService { }
+using System.Threading.Tasks;
+
+namespace MkDownOffice.Contracts;
+
+public interface IFileService
+{
+  public Task<Folder> OpenFolderAsync(string path);
+}
