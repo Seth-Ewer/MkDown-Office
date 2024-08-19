@@ -22,9 +22,6 @@ namespace HelloPhotinoApp
                 .SetSize(new Size(600, 400))
                 // Center window in the middle of the screen
                 .Center()
-                // Users can resize windows by default.
-                // Let's make this one fixed instead.
-                .SetResizable(false)
                 .RegisterCustomSchemeHandler("app", (object sender, string scheme, string url, out string contentType) =>
                 {
                     contentType = "text/javascript";
