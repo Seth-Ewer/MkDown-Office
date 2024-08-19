@@ -1,23 +1,33 @@
-﻿using System;
-using System.Net.Http;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
+
+using MkDownOffice.Contracts;
+using MkDownOffice.Services;
+
 using Photino.Blazor;
+
+using System;
 
 namespace MkDownOffice
 {
-    class Program
+  class Program
+  {
+    [STAThread]
+    static void Main(string[] args)
     {
-        [STAThread]
-        static void Main(string[] args)
-        {
-            var appBuilder = PhotinoBlazorAppBuilder.CreateDefault(args);
+      var appBuilder = PhotinoBlazorAppBuilder.CreateDefault(args);
 
-            appBuilder.Services.AddLogging();
+      appBuilder.Services.AddLogging();
 
-            // register root component and selector
-            appBuilder.RootComponents.Add<App>("app");
+      // Register Core Application Services
+      appBuilder.Services.AddSingleton<IFileService, FileService>();
+      appBuilder.Services.AddSingleton<ILinkService, LinkService>();
+      appBuilder.Services.AddSingleton<ISearchService, SearchService>();
+      appBuilder.Services.AddSingleton<IGitService, GitService>();
 
-            var app = appBuilder.Build();
+      // register root component and selector
+      appBuilder.RootComponents.Add<App>("app");
+
+      var app = appBuilder.Build();
 
             // customize window
             app.MainWindow
@@ -25,13 +35,13 @@ namespace MkDownOffice
                 .SetTitle("Photino Blazor Sample")
                 .SetDevToolsEnabled(true);
 
-            AppDomain.CurrentDomain.UnhandledException += (sender, error) =>
-            {
-                app.MainWindow.ShowMessage("Fatal exception", error.ExceptionObject.ToString());
-            };
+      AppDomain.CurrentDomain.UnhandledException += (sender, error) =>
+      {
+        app.MainWindow.ShowMessage("Fatal exception", error.ExceptionObject.ToString());
+      };
 
-            app.Run();
+      app.Run();
 
-        }
     }
+  }
 }
