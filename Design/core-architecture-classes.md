@@ -42,7 +42,25 @@ class Photino_Services {
   GitService Git
 }
 Photino_Window --> Photino_Services : Hosts Backend
-Menu_UI ..> Photino_Services : Dependency
+ViewModel ..> Photino_Services : Dependency
+
+class ViewModel {
+  // Bindable Properties
+  Folder RootFolder
+  Folder CurrentFolder
+  MarkdownFile CurrentFile  
+  // Services
+  SearchService _searchService
+  LinksService _linksService
+  GitService _gitService
+  FileService _fileService
+  SetRootFolder(path)
+  SetCurrentFolder(path)
+  SetCurrentFile(path)
+  GetMarkdown()
+}
+Menu_UI ..> ViewModel : Inject
+Editor_UI ..> ViewModel : Inject
 
 class SearchService {
   MarkdownFile[] Search(string query)
@@ -87,9 +105,7 @@ class Blazor_App {
 Photino_Window --> Blazor_App : Hosts Frontend
 
 class Menu_UI {
-  Folder RootFolder
-  Folder CurrentFolder
-  MarkdownFile CurrentFile
+  ViewModel ViewModel
 }
 Blazor_App --> Menu_UI : Shows
 
@@ -102,7 +118,7 @@ class Folder {
   GetParentFolder(): Folder
   GetChildFolder(string name): Folder
 }
-Menu_UI ..> Folder : RootFolder
+ViewModel ..> Folder : RootFolder
 
 class MarkdownFile {
   string Name
@@ -110,7 +126,7 @@ class MarkdownFile {
   Markdown Markdown
 }
 Folder ..> MarkdownFile : Files
-Menu_UI ..> MarkdownFile : CurrentFile
+ViewModel ..> MarkdownFile : CurrentFile
 
 class Editor_UI {
   string CurrentFile

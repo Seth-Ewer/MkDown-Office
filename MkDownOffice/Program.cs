@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 
 using MkDownOffice.Contracts;
+using MkDownOffice.Models;
 using MkDownOffice.Services;
 
 using Photino.Blazor;
@@ -24,16 +25,18 @@ namespace MkDownOffice
       appBuilder.Services.AddSingleton<ISearchService, SearchService>();
       appBuilder.Services.AddSingleton<IGitService, GitService>();
 
+      appBuilder.Services.AddSingleton<ViewModel>();
+
       // register root component and selector
       appBuilder.RootComponents.Add<App>("app");
 
       var app = appBuilder.Build();
 
-            // customize window
-            app.MainWindow
-                .SetIconFile("favicon.ico")
-                .SetTitle("Photino Blazor Sample")
-                .SetDevToolsEnabled(true);
+      // customize window
+      app.MainWindow
+          .SetIconFile("favicon.ico")
+          .SetTitle("Photino Blazor Sample")
+          .SetDevToolsEnabled(true);
 
       AppDomain.CurrentDomain.UnhandledException += (sender, error) =>
       {

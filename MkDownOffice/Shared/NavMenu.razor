@@ -1,4 +1,7 @@
-﻿<div class="top-row pl-4 navbar navbar-dark">
+﻿@using MkDownOffice.Models
+@inject ViewModel _viewModel
+
+<div class="top-row pl-4 navbar navbar-dark">
     <a class="navbar-brand" href="">MkDown Office</a>
     <button class="navbar-toggler" @onclick="ToggleNavMenu">
         <span class="navbar-toggler-icon"></span>
