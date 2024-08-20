@@ -1,5 +1,6 @@
 ﻿using MkDownOffice.Contracts;
 
+using System.IO;
 using System.Threading.Tasks;
 
 namespace MkDownOffice.Models;
@@ -45,9 +46,13 @@ public class ViewModel
   }
   public async Task SetCurrentFile(string filename)
   {
+    if (this.CurrentFolder == null) { throw new DirectoryNotFoundException(); }
+
+    var path = Path.Combine(this.CurrentFolder.Path, filename);
+
     if (this.CurrentFile != null) await _fileService.SaveFileAsync(this.CurrentFile);
 
-    this.CurrentFile = await _fileService.OpenFileAsync(filename);
+    this.CurrentFile = await _fileService.OpenFileAsync(path);
   }
 
   public string GetRenderedMarkdownForCurrentFile()
