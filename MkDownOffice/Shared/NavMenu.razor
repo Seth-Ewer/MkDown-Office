@@ -9,16 +9,38 @@
 </div>
 
 <div class="@NavMenuCssClass" @onclick="ToggleNavMenu">
+    @if(_viewModel.RootFolder == null)
+    {
+        <button @onclick="OpenRootFolderSelect"> CLICK HERE TO SELECT FOLDER </button>
+    }
+    else
+    {
+
     <ul class="nav flex-column">
-        <li class="nav-item px-3">
-            <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
-                <span class="oi oi-home" aria-hidden="true"></span> Home
-            </NavLink>
-        </li>
+
+        @foreach(var folder in _viewModel.CurrentFolder.Folders)
+        {
+            <li @onclick="() => _viewModel.SetCurrentFolder(folder)">
+                @folder
+            </li>
+        }
+        
+        @foreach(var file in _viewModel.CurrentFolder.Files)
+        {
+            <li @onclick="() => _viewModel.SetCurrentFile(file)">
+                @file
+            </li>
+        }
     </ul>
+    }
 </div>
 
 @code {
+    private void OpenRootFolderSelect()
+    {
+        //Temporarily(?) locked to appdata folder
+        _viewModel.SetRootFolder();
+    }
     private bool collapseNavMenu = true;
 
     private string NavMenuCssClass => collapseNavMenu ? "collapse" : null;

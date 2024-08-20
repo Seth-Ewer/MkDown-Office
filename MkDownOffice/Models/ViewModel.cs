@@ -1,4 +1,10 @@
-﻿using MkDownOffice.Contracts;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Linq.Expressions;
+using MkDownOffice.Contracts;
+using Photino.NET;
 
 namespace MkDownOffice.Models;
 
@@ -8,7 +14,7 @@ public class ViewModel
   private readonly ILinkService _linkService;
   private readonly ISearchService _searchServie;
   private readonly IGitService _gitService;
-
+  public PhotinoWindow _mainWindow => Program.MainWindow;
 
   public ViewModel(
     IFileService fileService,
@@ -26,10 +32,33 @@ public class ViewModel
   public Folder CurrentFolder { get; set; }
   public MarkdownFile CurrentFile { get; set; }
 
-  public void SetRootFolder(string path)
+  public void SetRootFolder()
   {
+    try{
+
+    var path = Path.Combine(
+      Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+      "mkdownoffice"
+      );
+    
+    if(!Directory.Exists(path))
+      Directory.CreateDirectory(path);
+
     this.RootFolder = new Folder();
+    this.RootFolder.Path = path;
+
+    var dirInfo = new DirectoryInfo(path);
+
+    this.RootFolder.Name = dirInfo.Name;
+    this.RootFolder.Folders = (from dir in dirInfo.GetDirectories() select dir.Name).ToList();
+    this.RootFolder.Files = (from file in dirInfo.GetFiles() select file.Name).ToList();
+
     this.CurrentFolder = this.RootFolder;
+    
+    }catch(Exception ex)
+    {
+      var temp = ex;
+    }
   }
   public void CloseRootFolder()
   {
@@ -37,12 +66,23 @@ public class ViewModel
     this.CurrentFolder = null;
     this.CurrentFile = null;
   }
-  public void SetCurrentFolder(string path)
+  public void SetCurrentFolder(string name)
   {
+    var path = Path.Combine(this.CurrentFolder.Path, name);
     this.CurrentFolder = new Folder();
+    this.CurrentFolder.Path = path;
+
+    var dirInfo = new DirectoryInfo(path);
+    
+    this.CurrentFolder.Name = dirInfo.Name;
+    this.CurrentFolder.Folders = (from dir in dirInfo.GetDirectories() select dir.Name).ToList();
+    this.CurrentFolder.Files = (from file in dirInfo.GetFiles() select file.Name).ToList();
   }
   public void SetCurrentFile(string filename)
   {
     this.CurrentFile = new MarkdownFile();
+    this.CurrentFile.Name = filename;
+    this.CurrentFile.Path = Path.Combine(this.CurrentFolder.Path, filename);
+    this.CurrentFile.Markdown = null;
   }
 }
