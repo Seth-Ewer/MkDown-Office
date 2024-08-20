@@ -50,7 +50,8 @@ public class ViewModel
 
     var path = Path.Combine(this.CurrentFolder.Path, filename);
 
-    if (this.CurrentFile != null) await _fileService.SaveFileAsync(this.CurrentFile);
+    if (this.CurrentFile != null && this.CurrentFile.HasChanges)
+      await _fileService.SaveFileAsync(this.CurrentFile);
 
     this.CurrentFile = await _fileService.OpenFileAsync(path);
   }
