@@ -54,7 +54,6 @@ public class ViewModel
 
     this.CurrentFile = await _fileService.OpenFileAsync(path);
   }
-
   public string GetRenderedMarkdownForCurrentFile()
   {
     return Markdig.Markdown.ToHtml(this.CurrentFile.Markdown);
