@@ -2,7 +2,7 @@
 
 ## Top 10 Features of this Application
 
-These are the top 10 user-level features or use cases for the application.
+These are the top user-level features or use cases for the application.
 
 1. Edit Markdown files stored on your local computer.
 2. Support all of the Markdown features in the same way that GitHub does.
@@ -10,12 +10,23 @@ These are the top 10 user-level features or use cases for the application.
    2. Consider [GFM Spec](https://github.github.com/gfm/) for details.
 3. It should be a sort-of WYSIWYG editor for Markdown files.
    1. Text and images should be displayed per GFM rules while editing.
-   2. The editor should be able to display the rendering Markdown format codes onscreen, but they should be rendered in a "greyed out" color to indicate they will not be visible to the end user.
+   2. The editor should be able to display the rendering Markdown format codes on screen, but they should be rendered in a "grayed out" color to indicate they will not be visible to the end user.
    3. Note, we expect this to work more or less like it does when editing Markdown text in the Discord chat application.
 4. Check those markdown files in/out from a Git repository.
 5. Manage images to include in the Markdown files as a sub-folder under the file.
 6. Build an index of Markdown files so we can show links and back-links in the UI.
 7. Ensure that links between Markdown files allow navigation between them even after uploading to GitHub.
+
+## Road-map
+
+These are features that we would like to add in future releases but will not be included in v1 of the application.
+
+1. [MARP](https://github.com/marp-team/marp) support to render presentations.
+1. [MermaidJs](https://mermaid.js.org/) support for diagrams.
+1. Task lists with check boxes that you can sign off.
+1. Full support for all [GFM](https://github.github.com/gfm/) features.
+1. [Liquid Formatting](https://docs.github.com/en/contributing/writing-for-github-docs/using-markdown-and-liquid-in-github-docs) in Markdown.
+
 
 ## Major Architecture Features of this Application
 

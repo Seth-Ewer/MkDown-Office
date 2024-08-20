@@ -1,5 +1,8 @@
 ﻿using MkDownOffice.Contracts;
 
+using System.IO;
+using System.Threading.Tasks;
+
 namespace MkDownOffice.Models;
 
 public class ViewModel
@@ -41,8 +44,32 @@ public class ViewModel
   {
     this.CurrentFolder = new Folder();
   }
-  public void SetCurrentFile(string filename)
+  public async Task SetCurrentFile(string filename)
   {
+    if (this.CurrentFile != null) this.Save();
+
+    var info = new FileInfo(filename);
+    if (!info.Exists) throw new FileNotFoundException();
+
     this.CurrentFile = new MarkdownFile();
+    this.CurrentFile.Name = info.Name;
+    this.CurrentFile.Path = info.FullName;
+    var reader = info.OpenText();
+    this.CurrentFile.Markdown = await reader.ReadToEndAsync();
+  }
+
+  public string GetRenderedMarkdownForCurrentFile()
+  {
+    return Markdig.Markdown.ToHtml(this.CurrentFile.Markdown);
+  }
+
+  public void Save()
+  {
+    var info = new FileInfo(this.CurrentFile.Path);
+    if (!info.Exists) throw new FileNotFoundException();
+
+    using var writer = info.CreateText();
+    writer.WriteAsync(this.CurrentFile.Markdown);
+    writer.Close();
   }
 }

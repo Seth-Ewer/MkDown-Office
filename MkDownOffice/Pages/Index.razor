@@ -3,18 +3,28 @@
 @using MkDownOffice.Shared
 @inject ViewModel _viewModel
 
-<p>
-  @mockMarkDown
-</p>
-<p>
-  @mockParsed
-</p>
+<MarkdownEditor @bind-Value="@currentMarkdown"
+                ValueHTMLChanged="@OnMarkdownValueHTMLChanged"
+                />
+
+@* <p>
+  @((MarkupString)renderedMarkdown)
+</p> *@
 
 @code {
-    string mockMarkDown = "This is a `small section` of mock **Markdown** text.";
-    string mockParsed => markdownParse(mockMarkDown);
+  string renderedMarkdown = "";
+  string currentMarkdown = "";
 
-    string markdownParse(string raw){
-      return raw;
-    }
+  protected override async Task OnInitializedAsync()
+  {
+    await _viewModel.SetCurrentFile("D:\\GitHub\\MkDown-Office\\Design\\core-architecture-classes.md");
+    this.currentMarkdown = _viewModel.CurrentFile.Markdown;
+    this.renderedMarkdown = _viewModel.GetRenderedMarkdownForCurrentFile();
+  }
+
+  void OnMarkdownValueHTMLChanged(string value)
+  {
+    _viewModel.CurrentFile.Markdown = value;
+    this.renderedMarkdown = _viewModel.GetRenderedMarkdownForCurrentFile();
+  }
 }
