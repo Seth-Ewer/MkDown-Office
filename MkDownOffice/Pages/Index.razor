@@ -3,18 +3,35 @@
 @using MkDownOffice.Shared
 @inject ViewModel _viewModel
 
-<p>
-  @mockMarkDown
-</p>
-<p>
-  @mockParsed
-</p>
+<style>
+
+  .content {
+    height: 100%;
+  }
+
+  .CodeMirror-wrap {
+    flex-grow:initial;
+  }
+  .EasyMDEContainer {
+    height:100%;
+    flex-direction:column;
+  }
+</style>
+
+<MarkdownEditor @bind-Value="@currentMarkdown" Theme="github" />
 
 @code {
-    string mockMarkDown = "This is a `small section` of mock **Markdown** text.";
-    string mockParsed => markdownParse(mockMarkDown);
+  MarkdownFile _file;
+  string currentMarkdown 
+  { 
+    get => _file?.Markdown ?? ""; 
+    set => _file.Markdown = value; 
+  }
 
-    string markdownParse(string raw){
-      return raw;
-    }
+  protected override async Task OnInitializedAsync()
+  {
+    await _viewModel.SetCurrentFile("D:\\GitHub\\MkDown-Office\\Design\\core-architecture-classes.md");
+    this._file = _viewModel.CurrentFile;
+    await base.OnInitializedAsync();
+  }
 }

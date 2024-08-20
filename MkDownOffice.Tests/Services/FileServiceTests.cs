@@ -1,4 +1,9 @@
-﻿using MkDownOffice.Services;
+﻿using Microsoft.VisualStudio.TestPlatform.PlatformAbstractions;
+
+using MkDownOffice.Models;
+using MkDownOffice.Services;
+
+using System.Reflection;
 
 namespace MkDownOffice.Tests.Services;
 
@@ -104,5 +109,58 @@ public class FileServiceTests
 
     await Assert.ThrowsAsync<DirectoryNotFoundException>(async () => await SUT.OpenFolderAsync("NonexistentFolder"));
 
+  }
+
+  [Fact]
+  public async Task OpenFileAsync_ExistingFile_ReturnsMarkdownFile()
+  {
+    // Arrange
+    var filePath = Assembly.GetExecutingAssembly().GetAssemblyLocation();
+    filePath = filePath.Substring(0, filePath.LastIndexOf("\\"));
+    filePath = Path.Combine(filePath, "TestData", "OnlyMarkdownFiles", "SampleFileOne.md");
+
+
+    // Act
+    var SUT = new FileService();
+    var result = await SUT.OpenFileAsync(filePath);
+
+    // Assert
+    Assert.NotNull(result);
+    Assert.Equal("SampleFileOne.md", result.Name);
+    Assert.Equal(filePath, result.Path);
+    Assert.StartsWith("# Sample File", result.Markdown);
+  }
+
+  [Fact]
+  public async Task OpenFileAsync_NonExistingFile_ThrowsFileNotFoundException()
+  {
+    // Arrange
+    var filePath = "path/to/nonexisting/file.md";
+
+
+    // Act and Assert
+    var SUT = new FileService();
+    await Assert.ThrowsAsync<FileNotFoundException>(() => SUT.OpenFileAsync(filePath));
+  }
+
+  [Fact]
+  public async Task SaveFileAsync_ShouldWriteMarkdownToFile()
+  {
+    // Arrange
+    var mdFile = new MarkdownFile
+    {
+      Name = "test.md",
+      Path = Path.Combine("test.md"),
+      Markdown = "This is a test markdown file."
+    };
+
+    if (File.Exists(mdFile.Path)) File.Delete(mdFile.Path);
+
+    // Act
+    var SUT = new FileService();
+    await SUT.SaveFileAsync(mdFile);
+
+    // Assert
+    Assert.True(File.Exists(mdFile.Path));
   }
 }
