@@ -68,7 +68,7 @@ public class ViewModel
   }
   public void SetCurrentFolder(string name)
   {
-    var path = Path.Combine(this.CurrentFolder.Path, name);
+    var path = Path.Combine(CurrentFolder.Path, name);
     this.CurrentFolder = new Folder();
     this.CurrentFolder.Path = path;
 
@@ -81,8 +81,5 @@ public class ViewModel
   public void SetCurrentFile(string filename)
   {
     this.CurrentFile = new MarkdownFile();
-    this.CurrentFile.Name = filename;
-    this.CurrentFile.Path = Path.Combine(this.CurrentFolder.Path, filename);
-    this.CurrentFile.Markdown = null;
   }
 }
