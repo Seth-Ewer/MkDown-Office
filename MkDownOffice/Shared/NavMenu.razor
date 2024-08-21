@@ -8,7 +8,7 @@
     </button>
 </div>
 
-<div class="@NavMenuCssClass" @onclick="ToggleNavMenu">
+<div class="@NavMenuCssClass">
     @if(_viewModel.RootFolder == null)
     {
         <button @onclick="OpenRootFolderSelect"> CLICK HERE TO SELECT FOLDER </button>
@@ -49,7 +49,7 @@
         //Temporarily(?) locked to appdata folder
         _viewModel.SetRootFolder();
     }
-    private bool collapseNavMenu = true;
+    private bool collapseNavMenu = false;
 
     private string NavMenuCssClass => collapseNavMenu ? "collapse" : null;
 
