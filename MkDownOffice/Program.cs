@@ -38,7 +38,7 @@ namespace MkDownOffice
       // customize window
       app.MainWindow
           .SetIconFile("favicon.ico")
-          .SetTitle("Photino Blazor Sample")
+          .SetTitle("MkDown Office")
           .SetDevToolsEnabled(true);
       
       Program.MainWindow = app.MainWindow;
@@ -49,7 +49,6 @@ namespace MkDownOffice
       };
 
       app.Run();
-
     }
   }
 }

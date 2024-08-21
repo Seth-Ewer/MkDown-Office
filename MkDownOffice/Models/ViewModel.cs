@@ -6,6 +6,9 @@ using System.Linq.Expressions;
 using MkDownOffice.Contracts;
 using Photino.NET;
 
+using System.IO;
+using System.Threading.Tasks;
+
 namespace MkDownOffice.Models;
 
 public class ViewModel
@@ -78,8 +81,19 @@ public class ViewModel
     this.CurrentFolder.Folders = (from dir in dirInfo.GetDirectories() select dir.Name).ToList();
     this.CurrentFolder.Files = (from file in dirInfo.GetFiles() select file.Name).ToList();
   }
-  public void SetCurrentFile(string filename)
+  public async Task SetCurrentFile(string filename)
   {
-    this.CurrentFile = new MarkdownFile();
+    if (this.CurrentFolder == null) { throw new DirectoryNotFoundException(); }
+
+    var path = Path.Combine(this.CurrentFolder.Path, filename);
+
+    if (this.CurrentFile != null && this.CurrentFile.HasChanges)
+      await _fileService.SaveFileAsync(this.CurrentFile);
+
+    this.CurrentFile = await _fileService.OpenFileAsync(path);
+  }
+  public string GetRenderedMarkdownForCurrentFile()
+  {
+    return Markdig.Markdown.ToHtml(this.CurrentFile.Markdown);
   }
 }
