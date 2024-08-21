@@ -4,6 +4,8 @@ using MkDownOffice.Contracts;
 using MkDownOffice.Models;
 using MkDownOffice.Services;
 
+using Microsoft.FluentUI.AspNetCore.Components;
+
 using Photino.Blazor;
 
 using System;
@@ -18,6 +20,7 @@ namespace MkDownOffice
       var appBuilder = PhotinoBlazorAppBuilder.CreateDefault(args);
 
       appBuilder.Services.AddLogging();
+      appBuilder.Services.AddFluentUIComponents();
 
       // Register Core Application Services
       appBuilder.Services.AddSingleton<IFileService, FileService>();
@@ -26,6 +29,7 @@ namespace MkDownOffice
       appBuilder.Services.AddSingleton<IGitService, GitService>();
 
       appBuilder.Services.AddSingleton<ViewModel>();
+
 
       // register root component and selector
       appBuilder.RootComponents.Add<App>("app");
