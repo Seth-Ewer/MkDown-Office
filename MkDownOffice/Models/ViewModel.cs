@@ -78,8 +78,34 @@ public class ViewModel
     this.CurrentFolder.Folders = (from dir in dirInfo.GetDirectories() select dir.Name).ToList();
     this.CurrentFolder.Files = (from file in dirInfo.GetFiles() select file.Name).ToList();
   }
+  public void SetCurrentFolderToParent(int steps)
+  {
+    var dirInfo = new DirectoryInfo(this.CurrentFolder.Path);
+    for(var i = 0; i < steps; i++)
+    {
+      dirInfo = dirInfo.Parent;
+    }
+    this.CurrentFolder = new Folder();
+    
+    this.CurrentFolder.Path = dirInfo.FullName;
+    this.CurrentFolder.Name = dirInfo.Name;
+    this.CurrentFolder.Folders = (from dir in dirInfo.GetDirectories() select dir.Name).ToList();
+    this.CurrentFolder.Files = (from file in dirInfo.GetFiles() select file.Name).ToList();
+  }
   public void SetCurrentFile(string filename)
   {
     this.CurrentFile = new MarkdownFile();
+  }
+  public List<string> GetBreadcrumbs()
+  {
+    var Crumbs = new List<string>();
+    var dirInfo = new DirectoryInfo(this.CurrentFolder.Path);
+    while(dirInfo.Name != this.RootFolder.Name)
+    {
+      Crumbs.Add(dirInfo.Name);
+      dirInfo = dirInfo.Parent;
+    }
+    Crumbs.Add(this.RootFolder.Name);
+    return Crumbs;
   }
 }
