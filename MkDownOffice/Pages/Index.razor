@@ -1,7 +1,9 @@
 ﻿@page "/"
+@page "/md/{*pageRoute}"
 @using MkDownOffice.Models
 @using MkDownOffice.Shared
 @using System.ComponentModel
+@inject NavigationManager Navigation
 @inject ViewModel _viewModel
 
 <style>
@@ -27,6 +29,7 @@
   </div>
 
 @code {
+  [Parameter] public string pageRoute { get; set; }
   MarkdownEditor mdEdit;
   string displayMarkdown { get => this._viewModel.IsFolderOpen ? "block" : "none"; }
   string currentMarkdown 
@@ -41,22 +44,24 @@
 
   protected override async Task OnInitializedAsync()
   {
-    if(this._viewModel.IsFolderOpen)
-    {
-      await this._viewModel.SetCurrentFile("Design\\core-architecture-classes.md");
-    }
-
     this._viewModel.PropertyChanged += HandlePropertyChanged;
-
     await base.OnInitializedAsync();  
+  }
+
+  protected override async Task OnParametersSetAsync()
+  {
+    if(!string.IsNullOrEmpty(pageRoute))
+    {
+      await this.mdEdit.SetValueAsync(this.currentMarkdown);
+    }
+    await base.OnParametersSetAsync();
   }
 
   private void HandlePropertyChanged(object sender, PropertyChangedEventArgs e)
   {
     if(e.PropertyName == nameof(this._viewModel.CurrentFile))
     {
-      this.mdEdit.Value = this.currentMarkdown;
-      this.StateHasChanged();
+      Navigation.NavigateTo($"/md/{this._viewModel.CurrentFile?.Path}");
     }
   }
 

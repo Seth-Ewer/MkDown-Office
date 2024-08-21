@@ -48,11 +48,25 @@ public class FileService : IFileService
   public async Task SaveFileAsync(MarkdownFile mdFile)
   {
     var info = new FileInfo(mdFile.Path);
+    bool isBlankLine = false;
 
     using var writer = info.CreateText();
     foreach (var l in mdFile.Markdown.Split('\n'))
     {
+      if(isBlankLine && string.IsNullOrWhiteSpace(l))
+      {
+        continue;
+      }
+      if(string.IsNullOrWhiteSpace(l))
+      {
+        isBlankLine = true;
+      }
+      else
+      {
+        isBlankLine = false;
+      }
       await writer.WriteLineAsync(l);
+      
     }
     writer.Close();
   }
