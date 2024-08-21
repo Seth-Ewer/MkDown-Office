@@ -1,7 +1,5 @@
 ﻿using MkDownOffice.Contracts;
 
-using Photino.NET;
-
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -18,7 +16,6 @@ public class ViewModel : INotifyPropertyChanged
   private readonly ILinkService _linkService;
   private readonly ISearchService _searchService;
   private readonly IGitService _gitService;
-  public PhotinoWindow _mainWindow => Program.MainWindow;
 
   public ViewModel(
     IFileService fileService,
@@ -58,13 +55,13 @@ public class ViewModel : INotifyPropertyChanged
     set => SetValue(ref _currentFile, value);
   }
 
-  public void SetRootFolder()
+  public void SetRootFolder(string rootFolderName = "MkDownOffice")
   {
     try
     {
       var path = Path.Combine(
         Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-        "mkdownoffice"
+        rootFolderName
         );
 
       if (!Directory.Exists(path))
