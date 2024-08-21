@@ -16,22 +16,29 @@
     else
     {
 
-    <ul class="nav flex-column">
+        @foreach(var folder in _viewModel.GetBreadcrumbs().Select((value, i) => new {i, value}))
+        {
+            <div @onclick="() => _viewModel.SetCurrentFolderToParent(folder.i)">
+                @folder.value //
+            </div>
+        }
 
-        @foreach(var folder in _viewModel.CurrentFolder.Folders)
-        {
-            <li @onclick="() => _viewModel.SetCurrentFolder(folder)">
-                @folder
-            </li>
-        }
-        
-        @foreach(var file in _viewModel.CurrentFolder.Files)
-        {
-            <li @onclick="() => _viewModel.SetCurrentFile(file)">
-                @file
-            </li>
-        }
-    </ul>
+        <ul class="nav flex-column">
+
+            @foreach(var folder in _viewModel.CurrentFolder.Folders)
+            {
+                <li @onclick="() => _viewModel.SetCurrentFolder(folder)">
+                    @folder
+                </li>
+            }
+
+            @foreach(var file in _viewModel.CurrentFolder.Files)
+            {
+                <li @onclick="() => _viewModel.SetCurrentFile(file)">
+                    @file
+                </li>
+            }
+        </ul>
     }
 </div>
 

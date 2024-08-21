@@ -2,6 +2,7 @@
 
 html, body {
     font-family: "Segoe UI","Noto Sans",Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji";
+    color: #e6edf3;
     background-color: #0d1117;
 }
 
@@ -159,6 +160,7 @@ app {
     }
 
     .sidebar {
+        color: #fff;
         width: 250px;
         height: 100vh;
         position: sticky;
