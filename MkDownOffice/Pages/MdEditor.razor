@@ -1,0 +1,58 @@
+﻿@page "/md/{*pageRoute}"
+@using MkDownOffice.Models
+@using MkDownOffice.Shared
+@using System.ComponentModel
+@inject NavigationManager Navigation
+@inject ViewModel _viewModel
+
+
+  <div class="content">
+    <div class="row">
+      <div class="col-md-12">
+        <MarkdownEditor @ref="mdEdit" @bind-Value="@currentMarkdown" Theme="github" />
+      </div>
+    </div>
+  </div>
+
+@code {
+  [Parameter] public string pageRoute { get; set; }
+  MarkdownEditor mdEdit;
+  string currentMarkdown 
+  { 
+    get => this._viewModel.CurrentFile?.Markdown ?? ""; 
+    set
+    {
+      if(!this._viewModel.IsFolderOpen) return;
+      this._viewModel.CurrentFile.Markdown = value; 
+    }
+  }
+
+  protected override async Task OnInitializedAsync()
+  {
+    this._viewModel.PropertyChanged += HandlePropertyChanged;
+    await base.OnInitializedAsync();  
+  }
+
+  protected override async Task OnParametersSetAsync()
+  {
+    if(!string.IsNullOrEmpty(pageRoute) && this.mdEdit!=null)
+    {
+      await this.mdEdit.SetValueAsync(this.currentMarkdown);
+    }
+    await base.OnParametersSetAsync();
+  }
+
+  private void HandlePropertyChanged(object sender, PropertyChangedEventArgs e)
+  {
+    if(e.PropertyName == nameof(this._viewModel.CurrentFile))
+    {
+      Navigation.NavigateTo($"/md/{this._viewModel.CurrentFile?.Path}");
+    }
+  }
+
+  ~MdEditor()
+  {
+    if (this._viewModel.CurrentFile.HasChanges) this._viewModel.Save();
+    this._viewModel.PropertyChanged -= HandlePropertyChanged;
+  }
+}

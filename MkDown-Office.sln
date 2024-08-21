@@ -5,7 +5,7 @@ VisualStudioVersion = 17.5.002.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MkDownOffice", "MkDownOffice\MkDownOffice.csproj", "{8B38B038-D523-40DC-A0A2-884680F8AEDB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MkDownOffice.Tests", "MkDownOffice.Tests\MkDownOffice.Tests.csproj", "{FC728B74-97A3-4CC3-AA7A-46A83619EA42}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MkDownOffice.Tests", "MkDownOffice.Tests\MkDownOffice.Tests.csproj", "{FC728B74-97A3-4CC3-AA7A-46A83619EA42}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

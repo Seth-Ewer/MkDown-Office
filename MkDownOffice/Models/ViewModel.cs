@@ -143,9 +143,14 @@ public class ViewModel : INotifyPropertyChanged
     var path = Path.Combine(this.CurrentFolder.Path, filename);
 
     if (this.CurrentFile != null && this.CurrentFile.HasChanges)
-      await _fileService.SaveFileAsync(this.CurrentFile);
+      await this.Save();
 
     this.CurrentFile = await _fileService.OpenFileAsync(path);
+  }
+
+  public async Task Save()
+  {
+    await _fileService.SaveFileAsync(this.CurrentFile);
   }
 
   public string GetRenderedMarkdownForCurrentFile()

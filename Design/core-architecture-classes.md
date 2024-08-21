@@ -146,3 +146,11 @@ class Editor_UI {
 Blazor_App --> Editor_UI : Shows
 
 ```
+
+## UX Prototype
+
+The main screen for MkDown Office is the editor for Markdown files. This is a WYSIWYG editor that will display the Markdown text as it will be rendered in the final document. The editor will also display the Markdown text in a "grayed out" color to indicate that it will not be rendered in the final document.
+
+The image below shows what we expect the application to look like when it is complete. Version 1 will have only the Markdown Files and Folders icon available and subsequent versions will implement the other features.
+
+![UX Prototype](./Main-Markdown-Editor-Page.png)

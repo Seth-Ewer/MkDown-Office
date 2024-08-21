@@ -1,46 +1,19 @@
 ﻿@page "/"
-@page "/md/{*pageRoute}"
 @using MkDownOffice.Models
 @using MkDownOffice.Shared
 @using System.ComponentModel
 @inject NavigationManager Navigation
 @inject ViewModel _viewModel
 
-<style>
-
-  .content {
-    height: 100%;
-  }
-
-  .CodeMirror-wrap {
-    flex-grow:initial;
-  }
-  .EasyMDEContainer {
-    height:100%;
-    flex-direction:column;
-  }
-</style>
   <div class="content">
     <div class="row">
-      <div class="col-md-12" style="display:@displayMarkdown">
-        <MarkdownEditor @ref="mdEdit" @bind-Value="@currentMarkdown" Theme="github" />
+      <div class="col-md-12">
+        Select a markdown file
       </div>
     </div>
   </div>
 
 @code {
-  [Parameter] public string pageRoute { get; set; }
-  MarkdownEditor mdEdit;
-  string displayMarkdown { get => this._viewModel.IsFolderOpen ? "block" : "none"; }
-  string currentMarkdown 
-  { 
-    get => this._viewModel.CurrentFile?.Markdown ?? ""; 
-    set
-    {
-      if(!this._viewModel.IsFolderOpen) return;
-      this._viewModel.CurrentFile.Markdown = value; 
-    }
-  }
 
   protected override async Task OnInitializedAsync()
   {
@@ -48,20 +21,11 @@
     await base.OnInitializedAsync();  
   }
 
-  protected override async Task OnParametersSetAsync()
-  {
-    if(!string.IsNullOrEmpty(pageRoute))
-    {
-      await this.mdEdit.SetValueAsync(this.currentMarkdown);
-    }
-    await base.OnParametersSetAsync();
-  }
-
   private void HandlePropertyChanged(object sender, PropertyChangedEventArgs e)
   {
     if(e.PropertyName == nameof(this._viewModel.CurrentFile))
     {
-      Navigation.NavigateTo($"/md/{this._viewModel.CurrentFile?.Path}");
+      Navigation.NavigateTo($"/md/{this._viewModel.CurrentFile?.Name}");
     }
   }
 
