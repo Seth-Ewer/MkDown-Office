@@ -27,7 +27,6 @@ These are features that we would like to add in future releases but will not be 
 1. Full support for all [GFM](https://github.github.com/gfm/) features.
 1. [Liquid Formatting](https://docs.github.com/en/contributing/writing-for-github-docs/using-markdown-and-liquid-in-github-docs) in Markdown.
 
-
 ## Major Architecture Features of this Application
 
 The application is intended to run on a local computer and interact with the local file system. It will also interact with a Git repository to check files in and out. The application will be built using the following technologies:
@@ -147,13 +146,3 @@ class Editor_UI {
 Blazor_App --> Editor_UI : Shows
 
 ```
-
-
-
-
-
-
-
-
-
-
