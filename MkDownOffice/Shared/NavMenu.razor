@@ -15,13 +15,14 @@
     }
     else
     {
-
-        @foreach(var folder in _viewModel.GetBreadcrumbs().Select((value, i) => new {i, value}))
+        <FluentBreadcrumb>
+        @foreach(var folder in _viewModel.GetBreadcrumbs().Select((value, i) => new {i, value}).Reverse())
         {
-            <div @onclick="() => _viewModel.SetCurrentFolderToParent(folder.i)">
-                @folder.value //
-            </div>
+            <FluentBreadcrumbItem @onclick="() => _viewModel.SetCurrentFolderToParent(folder.i)">
+                @folder.value
+            </FluentBreadcrumbItem>
         }
+        </FluentBreadcrumb>
 
         <ul class="nav flex-column">
 
