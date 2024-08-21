@@ -164,7 +164,5 @@ public class ViewModel : INotifyPropertyChanged
     if (EqualityComparer<T>.Default.Equals(backingFiled, value)) return; backingFiled = value;
     OnPropertyChanged(propertyName);
   }
-
   #endregion INotifyPropertyChanged
-
 }

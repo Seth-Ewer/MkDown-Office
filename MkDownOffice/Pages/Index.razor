@@ -45,6 +45,15 @@ else
     {
       await this._viewModel.SetCurrentFile("Design\\core-architecture-classes.md");
     }
+
+    this._viewModel.PropertyChanged += async (sender, e) =>
+    {
+      if(e.PropertyName == nameof(this._viewModel.CurrentFile))
+      {
+        await InvokeAsync(StateHasChanged);
+      }
+    };
+
     await base.OnInitializedAsync();
   }
 }
