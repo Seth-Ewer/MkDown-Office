@@ -161,7 +161,8 @@ public class ViewModel : INotifyPropertyChanged
   }
   protected void SetValue<T>(ref T backingFiled, T value, [CallerMemberName] string propertyName = null)
   {
-    if (EqualityComparer<T>.Default.Equals(backingFiled, value)) return; backingFiled = value;
+    if (EqualityComparer<T>.Default.Equals(backingFiled, value)) return;
+    backingFiled = value;
     OnPropertyChanged(propertyName);
   }
   #endregion INotifyPropertyChanged

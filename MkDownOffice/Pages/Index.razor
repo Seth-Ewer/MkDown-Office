@@ -1,6 +1,7 @@
 ﻿@page "/"
 @using MkDownOffice.Models
 @using MkDownOffice.Shared
+@using System.ComponentModel
 @inject ViewModel _viewModel
 
 <style>
@@ -46,14 +47,21 @@ else
       await this._viewModel.SetCurrentFile("Design\\core-architecture-classes.md");
     }
 
-    this._viewModel.PropertyChanged += async (sender, e) =>
-    {
-      if(e.PropertyName == nameof(this._viewModel.CurrentFile))
-      {
-        await InvokeAsync(StateHasChanged);
-      }
-    };
+    this._viewModel.PropertyChanged += HandlePropertyChanged;
 
-    await base.OnInitializedAsync();
+    await base.OnInitializedAsync();  
+  }
+
+  private void HandlePropertyChanged(object sender, PropertyChangedEventArgs e)
+  {
+    if(e.PropertyName == nameof(this._viewModel.CurrentFile))
+    {
+      this.StateHasChanged();
+    }
+  }
+
+ ~Index()
+  {
+    this._viewModel.PropertyChanged -= HandlePropertyChanged;
   }
 }
