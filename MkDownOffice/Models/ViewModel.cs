@@ -70,14 +70,16 @@ public class ViewModel : INotifyPropertyChanged
       if (!Directory.Exists(path))
         Directory.CreateDirectory(path);
 
-      this.RootFolder = new Folder();
-      this.RootFolder.Path = path;
+      var tempFolder = new Folder();
+      tempFolder.Path = path;
 
       var dirInfo = new DirectoryInfo(path);
 
-      this.RootFolder.Name = dirInfo.Name;
-      this.RootFolder.Folders = (from dir in dirInfo.GetDirectories() select dir.Name).ToList();
-      this.RootFolder.Files = (from file in dirInfo.GetFiles() select file.Name).ToList();
+      tempFolder.Name = dirInfo.Name;
+      tempFolder.Folders = (from dir in dirInfo.GetDirectories() select dir.Name).ToList();
+      tempFolder.Files = (from file in dirInfo.GetFiles() select file.Name).ToList();
+      
+      this.RootFolder = tempFolder;
 
       this.CurrentFolder = this.RootFolder;
 
@@ -98,14 +100,16 @@ public class ViewModel : INotifyPropertyChanged
   public void SetCurrentFolder(string name)
   {
     var path = Path.Combine(CurrentFolder.Path, name);
-    this.CurrentFolder = new Folder();
-    this.CurrentFolder.Path = path;
+    var tempFolder = new Folder();
+    tempFolder.Path = path;
 
     var dirInfo = new DirectoryInfo(path);
 
-    this.CurrentFolder.Name = dirInfo.Name;
-    this.CurrentFolder.Folders = (from dir in dirInfo.GetDirectories() select dir.Name).ToList();
-    this.CurrentFolder.Files = (from file in dirInfo.GetFiles() select file.Name).ToList();
+    tempFolder.Name = dirInfo.Name;
+    tempFolder.Folders = (from dir in dirInfo.GetDirectories() select dir.Name).ToList();
+    tempFolder.Files = (from file in dirInfo.GetFiles() select file.Name).ToList();
+
+    this.CurrentFolder = tempFolder;
   }
 
   public void SetCurrentFolderToParent(int steps)
@@ -115,12 +119,14 @@ public class ViewModel : INotifyPropertyChanged
     {
       dirInfo = dirInfo.Parent;
     }
-    this.CurrentFolder = new Folder();
+    var tempFolder = new Folder();
 
-    this.CurrentFolder.Path = dirInfo.FullName;
-    this.CurrentFolder.Name = dirInfo.Name;
-    this.CurrentFolder.Folders = (from dir in dirInfo.GetDirectories() select dir.Name).ToList();
-    this.CurrentFolder.Files = (from file in dirInfo.GetFiles() select file.Name).ToList();
+    tempFolder.Path = dirInfo.FullName;
+    tempFolder.Name = dirInfo.Name;
+    tempFolder.Folders = (from dir in dirInfo.GetDirectories() select dir.Name).ToList();
+    tempFolder.Files = (from file in dirInfo.GetFiles() select file.Name).ToList();
+
+    this.CurrentFolder = tempFolder;
   }
 
   public List<string> GetBreadcrumbs()

@@ -1,12 +1,6 @@
 ﻿@using MkDownOffice.Models
+@using System.ComponentModel
 @inject ViewModel _viewModel
-
-<div class="top-row pl-4 navbar navbar-dark">
-    <a class="navbar-brand" href="">MkDown Office</a>
-    <button class="navbar-toggler" @onclick="ToggleNavMenu">
-        <span class="navbar-toggler-icon"></span>
-    </button>
-</div>
 
 <div class="@NavMenuCssClass">
     @if(_viewModel.RootFolder == null)
@@ -15,14 +9,6 @@
     }
     else
     {
-        <FluentBreadcrumb>
-        @foreach(var folder in _viewModel.GetBreadcrumbs().Select((value, i) => new {i, value}).Reverse())
-        {
-            <FluentBreadcrumbItem @onclick="() => _viewModel.SetCurrentFolderToParent(folder.i)">
-                @folder.value
-            </FluentBreadcrumbItem>
-        }
-        </FluentBreadcrumb>
 
         <ul class="nav flex-column">
 
@@ -43,6 +29,12 @@
     }
 </div>
 
+<div class="top-row pl-4 navbar navbar-dark">
+    <button class="navbar-toggler" @onclick="ToggleNavMenu">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+</div>
+
 @code {
     private void OpenRootFolderSelect()
     {
@@ -57,4 +49,18 @@
     {
         collapseNavMenu = !collapseNavMenu;
     }
+
+
+protected override async Task OnInitializedAsync() {
+    this._viewModel.PropertyChanged += HandlePropertyChanged;
+    await base.OnInitializedAsync();
+}
+
+private void HandlePropertyChanged(object sender, PropertyChangedEventArgs e)
+  {
+    if(e.PropertyName == nameof(this._viewModel.CurrentFolder))
+    {
+      this.StateHasChanged();
+    }
+  }
 }
