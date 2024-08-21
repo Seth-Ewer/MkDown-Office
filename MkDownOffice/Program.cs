@@ -5,13 +5,16 @@ using MkDownOffice.Models;
 using MkDownOffice.Services;
 
 using Photino.Blazor;
-
+using Photino.NET;
 using System;
 
 namespace MkDownOffice
 {
   class Program
   {
+
+    public static PhotinoWindow MainWindow { get; private set; }
+
     [STAThread]
     static void Main(string[] args)
     {
@@ -37,6 +40,8 @@ namespace MkDownOffice
           .SetIconFile("favicon.ico")
           .SetTitle("MkDown Office")
           .SetDevToolsEnabled(true);
+      
+      Program.MainWindow = app.MainWindow;
 
       AppDomain.CurrentDomain.UnhandledException += (sender, error) =>
       {

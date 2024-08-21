@@ -1,6 +1,9 @@
 ﻿@page "/"
+@page "/md/{*pageRoute}"
 @using MkDownOffice.Models
 @using MkDownOffice.Shared
+@using System.ComponentModel
+@inject NavigationManager Navigation
 @inject ViewModel _viewModel
 
 <style>
@@ -17,21 +20,53 @@
     flex-direction:column;
   }
 </style>
-
-<MarkdownEditor @bind-Value="@currentMarkdown" Theme="github" />
+  <div class="content">
+    <div class="row">
+      <div class="col-md-12" style="display:@displayMarkdown">
+        <MarkdownEditor @ref="mdEdit" @bind-Value="@currentMarkdown" Theme="github" />
+      </div>
+    </div>
+  </div>
 
 @code {
-  MarkdownFile _file;
+  [Parameter] public string pageRoute { get; set; }
+  MarkdownEditor mdEdit;
+  string displayMarkdown { get => this._viewModel.IsFolderOpen ? "block" : "none"; }
   string currentMarkdown 
   { 
-    get => _file?.Markdown ?? ""; 
-    set => _file.Markdown = value; 
+    get => this._viewModel.CurrentFile?.Markdown ?? ""; 
+    set
+    {
+      if(!this._viewModel.IsFolderOpen) return;
+      this._viewModel.CurrentFile.Markdown = value; 
+    }
   }
 
   protected override async Task OnInitializedAsync()
   {
-    await _viewModel.SetCurrentFile("D:\\GitHub\\MkDown-Office\\Design\\core-architecture-classes.md");
-    this._file = _viewModel.CurrentFile;
-    await base.OnInitializedAsync();
+    this._viewModel.PropertyChanged += HandlePropertyChanged;
+    await base.OnInitializedAsync();  
+  }
+
+  protected override async Task OnParametersSetAsync()
+  {
+    if(!string.IsNullOrEmpty(pageRoute))
+    {
+      await this.mdEdit.SetValueAsync(this.currentMarkdown);
+    }
+    await base.OnParametersSetAsync();
+  }
+
+  private void HandlePropertyChanged(object sender, PropertyChangedEventArgs e)
+  {
+    if(e.PropertyName == nameof(this._viewModel.CurrentFile))
+    {
+      Navigation.NavigateTo($"/md/{this._viewModel.CurrentFile?.Path}");
+    }
+  }
+
+ ~Index()
+  {
+    this._viewModel.PropertyChanged -= HandlePropertyChanged;
   }
 }
