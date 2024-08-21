@@ -39,7 +39,7 @@ public class FileService : IFileService
     var mdFile = new MarkdownFile();
     mdFile.Name = info.Name;
     mdFile.Path = info.FullName;
-    var reader = info.OpenText();
+    using var reader = info.OpenText();
     mdFile.Markdown = await reader.ReadToEndAsync();
 
     return mdFile;

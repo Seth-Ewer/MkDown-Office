@@ -18,26 +18,25 @@
     flex-direction:column;
   }
 </style>
-@if(this._viewModel.IsFolderOpen)
-{
-  <MarkdownEditor @bind-Value="@currentMarkdown" Theme="github" />
-}
-else
-{
   <div class="content">
     <div class="row">
-      <div class="col-md-12">
-        Please select a file to view or edit.
+      <div class="col-md-12" style="display:@displayMarkdown">
+        <MarkdownEditor @ref="mdEdit" @bind-Value="@currentMarkdown" Theme="github" />
       </div>
     </div>
   </div>
-}
 
 @code {
+  MarkdownEditor mdEdit;
+  string displayMarkdown { get => this._viewModel.IsFolderOpen ? "block" : "none"; }
   string currentMarkdown 
   { 
     get => this._viewModel.CurrentFile?.Markdown ?? ""; 
-    set => this._viewModel.CurrentFile.Markdown = value; 
+    set
+    {
+      if(!this._viewModel.IsFolderOpen) return;
+      this._viewModel.CurrentFile.Markdown = value; 
+    }
   }
 
   protected override async Task OnInitializedAsync()
@@ -56,6 +55,7 @@ else
   {
     if(e.PropertyName == nameof(this._viewModel.CurrentFile))
     {
+      this.mdEdit.Value = this.currentMarkdown;
       this.StateHasChanged();
     }
   }
