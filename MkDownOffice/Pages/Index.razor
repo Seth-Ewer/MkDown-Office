@@ -17,21 +17,34 @@
     flex-direction:column;
   }
 </style>
-
-<MarkdownEditor @bind-Value="@currentMarkdown" Theme="github" />
+@if(this._viewModel.IsFolderOpen)
+{
+  <MarkdownEditor @bind-Value="@currentMarkdown" Theme="github" />
+}
+else
+{
+  <div class="content">
+    <div class="row">
+      <div class="col-md-12">
+        Please select a file to view or edit.
+      </div>
+    </div>
+  </div>
+}
 
 @code {
-  MarkdownFile _file;
   string currentMarkdown 
   { 
-    get => _file?.Markdown ?? ""; 
-    set => _file.Markdown = value; 
+    get => this._viewModel.CurrentFile?.Markdown ?? ""; 
+    set => this._viewModel.CurrentFile.Markdown = value; 
   }
 
   protected override async Task OnInitializedAsync()
   {
-    await _viewModel.SetCurrentFile("D:\\GitHub\\MkDown-Office\\Design\\core-architecture-classes.md");
-    this._file = _viewModel.CurrentFile;
+    if(this._viewModel.IsFolderOpen)
+    {
+      await this._viewModel.SetCurrentFile("Design\\core-architecture-classes.md");
+    }
     await base.OnInitializedAsync();
   }
 }

@@ -1,21 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Linq.Expressions;
-using MkDownOffice.Contracts;
+﻿using MkDownOffice.Contracts;
+
 using Photino.NET;
 
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
+using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 
 namespace MkDownOffice.Models;
 
-public class ViewModel
+public class ViewModel : INotifyPropertyChanged
 {
   private readonly IFileService _fileService;
   private readonly ILinkService _linkService;
-  private readonly ISearchService _searchServie;
+  private readonly ISearchService _searchService;
   private readonly IGitService _gitService;
   public PhotinoWindow _mainWindow => Program.MainWindow;
 
@@ -27,38 +28,57 @@ public class ViewModel
   {
     _fileService = fileService;
     _linkService = linkService;
-    _searchServie = searchService;
+    _searchService = searchService;
     _gitService = gitService;
   }
 
-  public Folder RootFolder { get; set; }
-  public Folder CurrentFolder { get; set; }
-  public MarkdownFile CurrentFile { get; set; }
+  public bool IsFolderOpen { get => this.RootFolder != null && this.CurrentFolder != null; }
+
+  private Folder _rootFolder;
+  public Folder RootFolder
+  {
+    get => _rootFolder;
+    set => SetValue(ref _rootFolder, value);
+  }
+  private Folder _currentFolder;
+  public Folder CurrentFolder
+  {
+    get => _currentFolder;
+    set => SetValue(ref _currentFolder, value);
+  }
+  private MarkdownFile _currentFile;
+  public MarkdownFile CurrentFile
+  {
+    get => _currentFile;
+    set => SetValue(ref _currentFile, value);
+  }
 
   public void SetRootFolder()
   {
-    try{
+    try
+    {
 
-    var path = Path.Combine(
-      Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-      "mkdownoffice"
-      );
-    
-    if(!Directory.Exists(path))
-      Directory.CreateDirectory(path);
+      var path = Path.Combine(
+        Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+        "mkdownoffice"
+        );
 
-    this.RootFolder = new Folder();
-    this.RootFolder.Path = path;
+      if (!Directory.Exists(path))
+        Directory.CreateDirectory(path);
 
-    var dirInfo = new DirectoryInfo(path);
+      this.RootFolder = new Folder();
+      this.RootFolder.Path = path;
 
-    this.RootFolder.Name = dirInfo.Name;
-    this.RootFolder.Folders = (from dir in dirInfo.GetDirectories() select dir.Name).ToList();
-    this.RootFolder.Files = (from file in dirInfo.GetFiles() select file.Name).ToList();
+      var dirInfo = new DirectoryInfo(path);
 
-    this.CurrentFolder = this.RootFolder;
-    
-    }catch(Exception ex)
+      this.RootFolder.Name = dirInfo.Name;
+      this.RootFolder.Folders = (from dir in dirInfo.GetDirectories() select dir.Name).ToList();
+      this.RootFolder.Files = (from file in dirInfo.GetFiles() select file.Name).ToList();
+
+      this.CurrentFolder = this.RootFolder;
+
+    }
+    catch (Exception ex)
     {
       var temp = ex;
     }
@@ -76,14 +96,14 @@ public class ViewModel
     this.CurrentFolder.Path = path;
 
     var dirInfo = new DirectoryInfo(path);
-    
+
     this.CurrentFolder.Name = dirInfo.Name;
     this.CurrentFolder.Folders = (from dir in dirInfo.GetDirectories() select dir.Name).ToList();
     this.CurrentFolder.Files = (from file in dirInfo.GetFiles() select file.Name).ToList();
   }
   public async Task SetCurrentFile(string filename)
   {
-    if (this.CurrentFolder == null) { throw new DirectoryNotFoundException(); }
+    if (!this.IsFolderOpen) { throw new DirectoryNotFoundException(); }
 
     var path = Path.Combine(this.CurrentFolder.Path, filename);
 
@@ -96,4 +116,18 @@ public class ViewModel
   {
     return Markdig.Markdown.ToHtml(this.CurrentFile.Markdown);
   }
+
+  #region INotifyPropertyChanged
+  public event PropertyChangedEventHandler PropertyChanged;
+  protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+  {
+    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+  }
+  protected void SetValue<T>(ref T backingFiled, T value, [CallerMemberName] string propertyName = null)
+  {
+    if (EqualityComparer<T>.Default.Equals(backingFiled, value)) return; backingFiled = value;
+    OnPropertyChanged(propertyName);
+  }
+
+  #endregion INotifyPropertyChanged
 }
