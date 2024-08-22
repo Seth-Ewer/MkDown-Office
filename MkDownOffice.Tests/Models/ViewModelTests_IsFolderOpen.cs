@@ -3,7 +3,7 @@ using MkDownOffice.Services;
 
 namespace MkDownOffice.Tests.Models;
 
-public class ViewModelFolderTests
+public class ViewModelTests_IsFolderOpen
 {
   [Fact]
   public void ViewModel_SaysFolderNotOpen_WhenRootFolderIsNull()

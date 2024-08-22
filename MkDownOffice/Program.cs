@@ -14,7 +14,6 @@ namespace MkDownOffice
 {
   class Program
   {
-
     public static PhotinoWindow MainWindow { get; private set; }
 
     [STAThread]
@@ -50,6 +49,7 @@ namespace MkDownOffice
       AppDomain.CurrentDomain.UnhandledException += (sender, error) =>
       {
         app.MainWindow.ShowMessage("Fatal exception", error.ExceptionObject.ToString());
+        Environment.Exit(1);
       };
 
       app.Run();
