@@ -1,9 +1,12 @@
 ﻿@inherits LayoutComponentBase
+@using MkDownOffice.Models
+@using System.ComponentModel
+@inject ViewModel _viewModel
 
 <FluentDesignTheme Mode="DesignThemeModes.Dark"/>
 
 
-<div>
+<div class="top-menu">
     <TopMenu />
 </div>
 
@@ -12,10 +15,19 @@
     <div class="toolbar">
         <ToolBar />
     </div>
-
-    <div class="sidebar">
-        <NavMenu />
-    </div>
+    
+    @switch(_viewModel.CurrentMenu)
+    {
+        case null:
+            break;
+        case "Files":
+            <div class="sidebar">
+                <NavMenu />
+            </div>
+            break;
+        default:
+            break;
+    }
 
     <div class="main">
         <div class="top-row px-4">
@@ -28,3 +40,22 @@
     </div>
 
 </div>
+
+
+@code {
+protected override async Task OnInitializedAsync() {
+    this._viewModel.PropertyChanged += HandlePropertyChanged;
+    await base.OnInitializedAsync();
+}
+
+private void HandlePropertyChanged(object sender, PropertyChangedEventArgs e)
+  {
+    if(e.PropertyName == nameof(this._viewModel.CurrentMenu))
+    {
+      this.StateHasChanged();
+    }
+  }
+~MainLayout(){
+    this._viewModel.PropertyChanged -= HandlePropertyChanged;   
+}
+}

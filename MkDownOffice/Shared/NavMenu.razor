@@ -2,7 +2,7 @@
 @using System.ComponentModel
 @inject ViewModel _viewModel
 
-<div class="@NavMenuCssClass">
+<div>
     @if(_viewModel.RootFolder == null)
     {
         <button @onclick="OpenRootFolderSelect"> CLICK HERE TO SELECT FOLDER </button>
@@ -29,27 +29,12 @@
     }
 </div>
 
-<div class="top-row pl-4 navbar navbar-dark">
-    <button class="navbar-toggler" @onclick="ToggleNavMenu">
-        <span class="navbar-toggler-icon"></span>
-    </button>
-</div>
-
 @code {
     private void OpenRootFolderSelect()
     {
         //Temporarily(?) locked to appdata folder
         _viewModel.SetRootFolder();
     }
-    private bool collapseNavMenu = false;
-
-    private string NavMenuCssClass => collapseNavMenu ? "collapse" : null;
-
-    private void ToggleNavMenu()
-    {
-        collapseNavMenu = !collapseNavMenu;
-    }
-
 
 protected override async Task OnInitializedAsync() {
     this._viewModel.PropertyChanged += HandlePropertyChanged;
@@ -63,4 +48,7 @@ private void HandlePropertyChanged(object sender, PropertyChangedEventArgs e)
       this.StateHasChanged();
     }
   }
+~NavMenu(){
+    this._viewModel.PropertyChanged -= HandlePropertyChanged;   
+}
 }

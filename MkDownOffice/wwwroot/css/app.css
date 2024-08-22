@@ -4,6 +4,7 @@ html, body {
     font-family: "Segoe UI","Noto Sans",Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji";
     color: #e6edf3;
     background-color: #0d1117;
+    height: 100vh;
 }
 
 a, .btn-link {
@@ -20,12 +21,15 @@ app {
     position: relative;
     display: flex;
     flex-direction: column;
+    height: 100%;
 }
 
 .hbox {
     position: relative;
     display: flex;
     flex-direction: row;
+    align-items: stretch;
+    height: 100%;
 }
 
 .top-row {
@@ -62,7 +66,7 @@ app {
 .sidebar {
     display: block;
     width: 200px;
-    height: 100vh;
+    height: 100%;
     position: sticky;
     top: 0;
 }
@@ -115,11 +119,20 @@ app {
             }
 
 .toolbar {
-    display: block;
+    display: flex;
+    flex-direction: column;
     width: 50px;
-    height: 100vh;
+    height: 100%;
     position: sticky;
     top: 0;
+}
+
+.toolbar-link {
+    height: 48px;
+}
+
+.top-menu {
+    height: 40px;
 }
 
 .content {
