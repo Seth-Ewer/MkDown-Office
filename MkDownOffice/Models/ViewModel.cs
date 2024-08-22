@@ -76,13 +76,6 @@ public class ViewModel : INotifyPropertyChanged
     set => SetValue(ref _currentMenu, value);
   }
 
-  private string _currentMenu;
-  public string CurrentMenu
-  {
-    get => _currentMenu;
-    set => SetValue(ref _currentMenu, value);
-  }
-
   public void SetRootFolder(string rootFolderName = "MkDownOffice")
   {
     try
