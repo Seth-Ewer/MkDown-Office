@@ -1,0 +1,58 @@
+@using MkDownOffice.Models
+@inject ViewModel _viewModel
+
+<FluentNavMenu style="flex-grow: 1;">
+    @foreach(string name in links)
+    {
+        <FluentNavLink @onclick="@(() => NavigationButtonHandler(name))">
+            <FluentIcon Value="@TestIcon(name)" Width="48px" Color="@(IconColorHandler(name))"/>
+        </FluentNavLink>
+    }
+</FluentNavMenu>
+<FluentNavMenu>
+    @foreach(string name in links)
+    {
+        <FluentNavLink @onclick="@(() => NavigationButtonHandler(name))">
+            <FluentIcon Value="@TestIcon(name)" Width="48px" Color="@(IconColorHandler(name))"/>
+        </FluentNavLink>
+    }
+</FluentNavMenu>
+
+
+@code {
+
+    private static string[] links = {
+            "Files",
+            "Search",
+            "Media",
+            "Git"
+        };
+
+    public Color IconColorHandler(string target) {
+        if(_viewModel.CurrentMenu == target)
+            return Color.Neutral;
+        else
+            return Color.Accent;
+    }
+
+    public void NavigationButtonHandler(string target) {
+        if(_viewModel.CurrentMenu == target)
+            _viewModel.CurrentMenu = null;
+        else
+            _viewModel.CurrentMenu = target;
+    }
+    public void SettingButtonHandler(string target){}
+
+    private static Icon TestIcon(string target) {
+        switch(target){
+            case "Files":
+               return new Icons.Regular.Size24.DocumentFolder();
+            case "Search":
+                return new Icons.Regular.Size24.Search();
+            case "Media":
+                return new Icons.Regular.Size24.Image();
+            default:
+                return new Icons.Regular.Size24.CheckboxUnchecked();
+        }
+    }
+}

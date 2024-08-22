@@ -1,27 +1,14 @@
 ﻿@using MkDownOffice.Models
+@using System.ComponentModel
 @inject ViewModel _viewModel
 
-<div class="top-row pl-4 navbar navbar-dark">
-    <a class="navbar-brand" href="">MkDown Office</a>
-    <button class="navbar-toggler" @onclick="ToggleNavMenu">
-        <span class="navbar-toggler-icon"></span>
-    </button>
-</div>
-
-<div class="@NavMenuCssClass" @onclick="ToggleNavMenu">
+<div>
     @if(_viewModel.RootFolder == null)
     {
         <button @onclick="OpenRootFolderSelect"> CLICK HERE TO SELECT FOLDER </button>
     }
     else
     {
-
-        @foreach(var folder in _viewModel.GetBreadcrumbs().Select((value, i) => new {i, value}))
-        {
-            <div @onclick="() => _viewModel.SetCurrentFolderToParent(folder.i)">
-                @folder.value //
-            </div>
-        }
 
         <ul class="nav flex-column">
 
@@ -48,12 +35,20 @@
         //Temporarily(?) locked to appdata folder
         _viewModel.SetRootFolder();
     }
-    private bool collapseNavMenu = true;
 
-    private string NavMenuCssClass => collapseNavMenu ? "collapse" : null;
+protected override async Task OnInitializedAsync() {
+    this._viewModel.PropertyChanged += HandlePropertyChanged;
+    await base.OnInitializedAsync();
+}
 
-    private void ToggleNavMenu()
+private void HandlePropertyChanged(object sender, PropertyChangedEventArgs e)
+  {
+    if(e.PropertyName == nameof(this._viewModel.CurrentFolder))
     {
-        collapseNavMenu = !collapseNavMenu;
+      this.StateHasChanged();
     }
+  }
+~NavMenu(){
+    this._viewModel.PropertyChanged -= HandlePropertyChanged;   
+}
 }
