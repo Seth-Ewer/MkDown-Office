@@ -31,10 +31,17 @@ public class ViewModel : INotifyPropertyChanged
 
   public long WindowHeight 
   { 
-    get => (  Program.MainWindow.Height       // full height of window
-            / Program.MainWindow.ScreenDpi    // divided by screen dpi to find inches
-            * 96)                             // times 90 to get browser scale pixel count
-            - Program.MainWindow.ScreenDpi;   // subtract 1/2 inch height of the title bar
+    get {
+    long calc = 300;
+    try{
+      calc = ( Program.MainWindow.Height       // full height of window
+             / Program.MainWindow.ScreenDpi    // divided by screen dpi to find inches
+             * 96)                             // times 90 to get browser scale pixel count
+             - Program.MainWindow.ScreenDpi;   // subtract 1/2 inch height of the title bar
+    }
+    catch{/* doesn't matter */}
+    return calc;
+    }
   }
   public bool IsFolderOpen
   {
@@ -168,11 +175,11 @@ public class ViewModel : INotifyPropertyChanged
   {
     PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
   }
-  protected void SetValue<T>(ref T backingFiled, T value, [CallerMemberName] string propertyName = null)
+  protected void SetValue<T>(ref T backingField, T value, [CallerMemberName] string propertyName = null)
   {
-    if (EqualityComparer<T>.Default.Equals(backingFiled, value)) return;
-    backingFiled = value;
-    OnPropertyChanged(propertyName);
+      if (EqualityComparer<T>.Default.Equals(backingField, value)) return;
+      backingField = value;
+      OnPropertyChanged(propertyName);
   }
   #endregion INotifyPropertyChanged
 }

@@ -11,7 +11,7 @@
       <div class="col-md-12 Column-Container Fill-Height">
         <MarkdownEditor @ref="mdEdit" 
                         MinHeight="300px"
-                        MaxHeight="@currentHeight"                         
+                        MaxHeight="@defaultHeight"                         
                         @bind-Value="@currentMarkdown" 
                         Theme="github" />
       </div>
@@ -20,7 +20,7 @@
 
 @code {
   [Parameter] public string pageRoute { get; set; }
-  string currentHeight = $"800px";
+  string defaultHeight = $"800px";
   MarkdownEditor mdEdit;
   string currentMarkdown 
   { 
@@ -34,7 +34,7 @@
   protected override async Task OnInitializedAsync()
   {
 
-    this.currentHeight = $"{this._viewModel.WindowHeight}px";
+    this.defaultHeight = $"{this._viewModel.WindowHeight}px";
     this._viewModel.PropertyChanged += HandlePropertyChanged;
     
     await base.OnInitializedAsync();  
