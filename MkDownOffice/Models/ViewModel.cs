@@ -29,6 +29,13 @@ public class ViewModel : INotifyPropertyChanged
     _gitService = gitService;
   }
 
+  public long WindowHeight 
+  { 
+    get => (  Program.MainWindow.Height       // full height of window
+            / Program.MainWindow.ScreenDpi    // divided by screen dpi to find inches
+            * 96)                             // times 90 to get browser scale pixel count
+            - Program.MainWindow.ScreenDpi;   // subtract 1/2 inch height of the title bar
+  }
   public bool IsFolderOpen
   {
     get => this.RootFolder != null && this.CurrentFolder != null;

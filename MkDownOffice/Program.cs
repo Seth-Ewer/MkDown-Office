@@ -12,7 +12,6 @@ namespace MkDownOffice
 {
   class Program
   {
-
     public static PhotinoWindow MainWindow { get; private set; }
 
     [STAThread]

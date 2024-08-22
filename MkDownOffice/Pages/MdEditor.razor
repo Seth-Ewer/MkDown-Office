@@ -5,17 +5,22 @@
 @inject NavigationManager Navigation
 @inject ViewModel _viewModel
 
-
-  <div class="content">
-    <div class="row">
-      <div class="col-md-12">
-        <MarkdownEditor @ref="mdEdit" @bind-Value="@currentMarkdown" Theme="github" />
+  <!-- Inside Componenet -->
+  <div class="content Column-Container">
+    <div class="row Column-Container Fill-Height">
+      <div class="col-md-12 Column-Container Fill-Height">
+        <MarkdownEditor @ref="mdEdit" 
+                        MinHeight="300px"
+                        MaxHeight="@currentHeight"                         
+                        @bind-Value="@currentMarkdown" 
+                        Theme="github" />
       </div>
     </div>
   </div>
 
 @code {
   [Parameter] public string pageRoute { get; set; }
+  string currentHeight = $"800px";
   MarkdownEditor mdEdit;
   string currentMarkdown 
   { 
@@ -26,10 +31,12 @@
       this._viewModel.CurrentFile.Markdown = value; 
     }
   }
-
   protected override async Task OnInitializedAsync()
   {
+
+    this.currentHeight = $"{this._viewModel.WindowHeight}px";
     this._viewModel.PropertyChanged += HandlePropertyChanged;
+    
     await base.OnInitializedAsync();  
   }
 
