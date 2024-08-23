@@ -1,6 +1,9 @@
-﻿using MkDownOffice.Contracts;
+﻿using Microsoft.FluentUI.AspNetCore.Components;
+
+using MkDownOffice.Contracts;
 using MkDownOffice.Models;
 
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -53,11 +56,11 @@ public class FileService : IFileService
     using var writer = info.CreateText();
     foreach (var l in mdFile.Markdown.Split('\n'))
     {
-      if(isBlankLine && string.IsNullOrWhiteSpace(l))
+      if (isBlankLine && string.IsNullOrWhiteSpace(l))
       {
         continue;
       }
-      if(string.IsNullOrWhiteSpace(l))
+      if (string.IsNullOrWhiteSpace(l))
       {
         isBlankLine = true;
       }
@@ -66,9 +69,37 @@ public class FileService : IFileService
         isBlankLine = false;
       }
       await writer.WriteLineAsync(l);
-      
+
     }
     writer.Close();
+  }
+
+  private static readonly Icon IconCollapsed = new Icons.Regular.Size20.Folder();
+  private static readonly Icon IconExpanded = new Icons.Regular.Size20.FolderOpen();
+  private static readonly Icon IconFile = new Icons.Regular.Size20.Document();
+  private static readonly string[] MdExtensions = [".md", ".mkd", ".mdwn", ".mdown", ".mdtxt", ".mdtext", ".markdown", ".text"];
+  public async Task<List<ITreeViewItem>> GetDirectoryTreeAsync(string path)
+  {
+    var root = new DirectoryInfo(path);
+    if (!root.Exists) throw new DirectoryNotFoundException();
+
+    var children = new List<ITreeViewItem>();
+    foreach (var folder in root.GetDirectories().OrderBy(x => x.Name))
+    {
+      var item = new TreeViewItem(folder.FullName, folder.Name);
+      item.IconCollapsed = IconCollapsed;
+      item.IconExpanded = IconExpanded;
+      item.Items = await this.GetDirectoryTreeAsync(folder.FullName);
+      children.Add(item);
+    }
+    foreach (var file in root.GetFiles().OrderBy(x => x.Name))
+    {
+      var item = new TreeViewItem(file.FullName, file.Name);
+      item.IconCollapsed = IconFile;
+      if (!MdExtensions.Contains(file.Extension.ToLower())) item.Disabled = true;
+      children.Add(item);
+    }
+    return children;
   }
 }
 

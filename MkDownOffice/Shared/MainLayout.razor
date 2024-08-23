@@ -3,57 +3,70 @@
 @using System.ComponentModel
 @inject ViewModel _viewModel
 
-<FluentDesignTheme Mode="DesignThemeModes.Dark"/>
+<FluentDesignTheme Mode="DesignThemeModes.Dark" />
 
-
-<div class="top-menu">
+<FluentMainLayout>
+  <Header>
     <TopMenu />
-</div>
+  </Header>
+  <SubHeader>
+    MkDownOffice
+  </SubHeader>
+  <Body>
+      @Body
+  </Body>
+  <NavMenuContent>
+    <NavMenu />
+  </NavMenuContent>
+</FluentMainLayout>
 
-<div class="hbox">
+<!--
 
-    <div class="toolbar">
-        <ToolBar />
-    </div>
-    
-    @switch(_viewModel.CurrentMenu)
-    {
-        case null:
-            break;
-        case "Files":
-            <div class="sidebar">
-                <NavMenu />
-            </div>
-            break;
-        default:
-            break;
-    }
+<FluentLayout>
 
-    <div class="main">
-        <div class="top-row px-4">
-            <a href="http://blazor.net" target="_blank" class="ml-md-auto">About</a>
-        </div>
+  <FluentHeader>
+    <TopMenu />
+  </FluentHeader>
 
-    @Body
-</div>
+  <FluentSplitter Orientation="Orientation.Horizontal"
+                  BarSize="6"
+                  Panel1MinSize="15%"
+                  Panel1Size="15%"
+                  Panel2MinSize="50px">
+    <Panel1>
+      <NavMenu />
+    </Panel1>
+    <Panel2>
+      @Body
+    </Panel2>
 
-</div>
+  </FluentSplitter>
+  <ToolBar />
 
+  <FluentFooter>
+    Footer
+  </FluentFooter>
+
+</FluentLayout>
+
+-->
 
 @code {
-protected override async Task OnInitializedAsync() {
+  protected override async Task OnInitializedAsync()
+  {
     this._viewModel.PropertyChanged += HandlePropertyChanged;
     await base.OnInitializedAsync();
-}
+  }
 
-private void HandlePropertyChanged(object sender, PropertyChangedEventArgs e)
+  private void HandlePropertyChanged(object sender, PropertyChangedEventArgs e)
   {
-    if(e.PropertyName == nameof(this._viewModel.CurrentMenu))
+    if (e.PropertyName == nameof(this._viewModel.CurrentMenu))
     {
       this.StateHasChanged();
     }
   }
-~MainLayout(){
-    this._viewModel.PropertyChanged -= HandlePropertyChanged;   
-}
+  ~MainLayout()
+  {
+    this._viewModel.PropertyChanged -= HandlePropertyChanged;
+  }
 }

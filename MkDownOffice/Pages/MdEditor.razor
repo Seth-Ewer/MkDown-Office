@@ -5,7 +5,7 @@
 @inject NavigationManager Navigation
 @inject ViewModel _viewModel
 
-  <!-- Inside Componenet -->
+  <!-- Inside Component -->
   <div class="content Column-Container">
     <div class="row Column-Container Fill-Height">
       <div class="col-md-12 Column-Container Fill-Height">
@@ -36,7 +36,7 @@
 
     this.defaultHeight = $"{this._viewModel.WindowHeight}px";
     this._viewModel.PropertyChanged += HandlePropertyChanged;
-    
+
     await base.OnInitializedAsync();  
   }
 
@@ -59,7 +59,10 @@
 
   ~MdEditor()
   {
-    if (this._viewModel.CurrentFile.HasChanges) this._viewModel.Save();
     this._viewModel.PropertyChanged -= HandlePropertyChanged;
+    if (this._viewModel.CurrentFile.HasChanges) {
+      var promise = this._viewModel.SaveAsync();
+      promise.Wait();
+    }
   }
 }
