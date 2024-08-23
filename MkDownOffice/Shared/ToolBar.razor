@@ -1,15 +1,10 @@
 @using MkDownOffice.Models
 @inject ViewModel _viewModel
 
-<FluentNavMenu style="flex-grow: 1;">
-    @foreach(string name in links)
-    {
-        <FluentNavLink @onclick="@(() => NavigationButtonHandler(name))">
-            <FluentIcon Value="@TestIcon(name)" Width="48px" Color="@(IconColorHandler(name))"/>
-        </FluentNavLink>
-    }
-</FluentNavMenu>
-<FluentNavMenu>
+
+<!--
+
+<FluentNavMenu style="flex-grow: 1; height:calc(100vh - 50);">
     @foreach(string name in links)
     {
         <FluentNavLink @onclick="@(() => NavigationButtonHandler(name))">
@@ -18,15 +13,39 @@
     }
 </FluentNavMenu>
 
+-->
+
+
+<FluentAppBar Style="height:100%; background-color: var(--neutral-layer-2);">
+
+  <FluentAppBarItem Href="/AppBarDefault"
+                    Match="NavLinkMatch.All"
+                    IconRest="DocumentFolderIcon()"
+                    IconActive="DocumentFolderIcon(active: true)"
+                    Text="Documents" />
+  <FluentAppBarItem Href="/AppBar"
+                    IconRest="SearchIcon()"
+                    IconActive="SearchIcon(active: true)"
+                    Text="Search" />
+
+  <FluentAppBarItem Href="/StructuredLogs"
+                    IconRest="ImageIcon()"
+                    IconActive="ImageIcon(active: true)"
+                    Text="Media"/>
+  <FluentAppBarItem Href="/Traces"
+                    IconRest="GitIcon()"
+                    IconActive="GitIcon(active: true)"
+                    Text="Git History" />
+</FluentAppBar>
 
 @code {
 
-    private static string[] links = {
-            "Files",
-            "Search",
-            "Media",
-            "Git"
-        };
+    // private static string[] links = {
+    //         "Files",
+    //         "Search",
+    //         "Media",
+    //         "Git"
+    //     };
 
     public Color IconColorHandler(string target) {
         if(_viewModel.CurrentMenu == target)
@@ -55,4 +74,20 @@
                 return new Icons.Regular.Size24.CheckboxUnchecked();
         }
     }
+
+  private static Icon DocumentFolderIcon(bool active = false) =>
+  active ? new Icons.Filled.Size24.DocumentFolder()
+         : new Icons.Regular.Size24.DocumentFolder();
+
+  private static Icon SearchIcon(bool active = false) =>
+      active ? new Icons.Filled.Size24.Search()
+             : new Icons.Regular.Size24.Search();
+
+  private static Icon ImageIcon(bool active = false) =>
+      active ? new Icons.Filled.Size24.Image()
+             : new Icons.Regular.Size24.Image();
+
+  private static Icon GitIcon(bool active = false) =>
+      active ? new Icons.Filled.Size24.History()
+             : new Icons.Regular.Size24.History();
 }

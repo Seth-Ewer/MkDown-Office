@@ -5,13 +5,12 @@
 
 <FluentDesignTheme Mode="DesignThemeModes.Dark" />
 
+<!-- 
+
 <FluentMainLayout>
   <Header>
     <TopMenu />
   </Header>
-  <SubHeader>
-    MkDownOffice
-  </SubHeader>
   <Body>
       @Body
   </Body>
@@ -20,36 +19,37 @@
   </NavMenuContent>
 </FluentMainLayout>
 
-<!--
+-->
 
-<FluentLayout>
+<FluentLayout Style="height:100vh;">
 
   <FluentHeader>
-    <TopMenu />
-  </FluentHeader>
+    MkDownOffice
+    <FluentSpacer />
+  </FluentHeader>  
 
   <FluentSplitter Orientation="Orientation.Horizontal"
                   BarSize="6"
                   Panel1MinSize="15%"
                   Panel1Size="15%"
-                  Panel2MinSize="50px">
+                  Panel2MinSize="50px"
+                  Style="height:100%">
     <Panel1>
-      <NavMenu />
+      <FluentStack Orientation="Orientation.Horizontal" 
+                   HorizontalGap="4"
+                   Style="height:100%; background-color: var(--neutral-layer-1)">
+        <ToolBar />
+        <NavMenu />
+      </FluentStack>
     </Panel1>
     <Panel2>
+      <TopMenu />
       @Body
     </Panel2>
 
   </FluentSplitter>
-  <ToolBar />
-
-  <FluentFooter>
-    Footer
-  </FluentFooter>
 
 </FluentLayout>
-
--->
 
 @code {
   protected override async Task OnInitializedAsync()

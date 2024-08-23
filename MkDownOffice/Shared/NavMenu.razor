@@ -9,51 +9,19 @@
   }
   else
   {
-    <FluentTreeView ref="@TreeView"
+    <FluentTreeView ref="@FilesTree"
                     Items="@Items" 
                     @bind-SelectedItem="@SelectedItem" 
                     OnSelectedChange="@HandleSelectedChanged"
                     LazyLoadItems="true">
     </FluentTreeView>
-    <!--
-
-    <ul class="nav flex-column">
-
-      @foreach (var folder in _viewModel.CurrentFolder.Folders)
-      {
-        <li @onclick="() => _viewModel.SetCurrentFolder(folder)">
-          @folder
-        </li>
-      }
-
-      @foreach (var file in _viewModel.CurrentFolder.Files)
-      {
-        <li @onclick="() => _viewModel.SetCurrentFile(file)">
-          @file
-        </li>
-      }
-    </ul>
-    -->
   }
 </div>
 
 @code {
-  private FluentTreeView? TreeView;
+  private FluentTreeView FilesTree;
   private IEnumerable<ITreeViewItem>? Items = new List<ITreeViewItem>();
-  //private ITreeViewItem? _selectedItem;
-  private ITreeViewItem? SelectedItem;
-  //{
-  //  get => _selectedItem;
-  //  set
-  //  {
-  //    if(_selectedItem != value)
-  //    {
-  //      _selectedItem = value;
-  //      this.HandleSelectedChanged((FluentTreeItem)value);
-  //    }
-  //  }
-  //}
-
+  private ITreeViewItem SelectedItem;
 
   private void OpenRootFolderSelect()
   {
@@ -90,32 +58,19 @@
   {
     if(this._viewModel.CurrentFile != null)
       foreach (var item in items)
-    {
-      if(item.Id == this._viewModel.CurrentFile.Path)
       {
-        return item;
+        if(item.Id == this._viewModel.CurrentFile.Path)
+        {
+          return item;
+        }
+        if (this._viewModel.CurrentFile.Path.StartsWith(item.Id))
+        {
+          var result = FindSelectedItem(item.Items);
+          if(result != null) return result;
+        }
       }
-      if (this._viewModel.CurrentFile.Path.StartsWith(item.Id))
-      {
-        var result = FindSelectedItem(item.Items);
-        if(result != null) return result;
-      }
-    }
     return null;
   }
-
-  // private void HandleSelectedChanged(ITreeViewItem item)
-  // {
-  //   var path = item.Id.Substring(0, item.Id.LastIndexOf(System.IO.Path.DirectorySeparatorChar));
-  //   if (this._viewModel.CurrentFolder.Path != path)
-  //   {
-  //     this._viewModel.SetCurrentFolder(path);
-  //   }
-  //   if (!string.IsNullOrEmpty(item.Text))
-  //   {
-  //     this._viewModel.SetCurrentFile(item.Text);
-  //   }
-  // }
 
   private void HandleSelectedChanged(FluentTreeItem item)
   {
@@ -126,7 +81,7 @@
     }
     if(!string.IsNullOrEmpty(item.Text))
     {
-      this._viewModel.SetCurrentFile(item.Text);
+      this._viewModel.SetCurrentFile(item.Text).ConfigureAwait(false);
     }
   }
 

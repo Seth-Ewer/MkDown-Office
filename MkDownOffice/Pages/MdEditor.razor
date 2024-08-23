@@ -6,28 +6,25 @@
 @inject ViewModel _viewModel
 
   <!-- Inside Component -->
-  <div class="content Column-Container">
-    <div class="row Column-Container Fill-Height">
-      <div class="col-md-12 Column-Container Fill-Height">
+      <div style="height:100%">
         <MarkdownEditor @ref="mdEdit" 
                         MinHeight="300px"
-                        MaxHeight="@defaultHeight"                         
+                        MaxHeight="@defaultHeight"
                         @bind-Value="@currentMarkdown" 
-                        Theme="github" />
+                        />
       </div>
-    </div>
-  </div>
 
 @code {
   [Parameter] public string pageRoute { get; set; }
   string defaultHeight = $"800px";
   MarkdownEditor mdEdit;
-  string currentMarkdown 
-  { 
-    get => this._viewModel.CurrentFile?.Markdown ?? ""; 
+  bool isManualUpdate = false;
+  string currentMarkdown
+  {
+    get => this._viewModel.CurrentFile?.Markdown ?? "";
     set
     {
-      if(!this._viewModel.IsFolderOpen) return;
+      if (!this._viewModel.IsFolderOpen || isManualUpdate) return;
       this._viewModel.CurrentFile.Markdown = value; 
     }
   }
@@ -44,7 +41,9 @@
   {
     if(!string.IsNullOrEmpty(pageRoute) && this.mdEdit!=null)
     {
+      this.isManualUpdate = true;
       await this.mdEdit.SetValueAsync(this.currentMarkdown);
+      this.isManualUpdate = false;
     }
     await base.OnParametersSetAsync();
   }

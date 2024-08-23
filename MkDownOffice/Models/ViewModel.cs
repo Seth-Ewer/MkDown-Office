@@ -189,8 +189,15 @@ public class ViewModel : INotifyPropertyChanged
 
   public List<string> GetBreadcrumbs()
   {
+    if (this.CurrentFolder == null) return [];
+
     var Crumbs = new List<string>();
     var dirInfo = new DirectoryInfo(this.CurrentFolder.Path);
+    if (this.CurrentFile != null)
+    {
+      var fileInfo = new FileInfo(this.CurrentFile.Path);
+      dirInfo = fileInfo.Directory;
+    }
     while (dirInfo.Name != this.RootFolder.Name)
     {
       Crumbs.Add(dirInfo.Name);
@@ -214,7 +221,8 @@ public class ViewModel : INotifyPropertyChanged
 
   public async Task SaveAsync()
   {
-    if (this.CurrentFile.HasChanges) await this._fileService.SaveFileAsync(this.CurrentFile);
+    if (this.CurrentFile.HasChanges)
+      await this._fileService.SaveFileAsync(this.CurrentFile);
     this.CurrentFile.HasChanges = false;
   }
 
