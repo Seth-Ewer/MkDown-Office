@@ -1,36 +1,27 @@
 ﻿@using MkDownOffice.Models
 @using System.ComponentModel
-@inject ViewModel _viewModel
+@inject MarkdownViewModel _viewModel
 
-<div>
-  @if (_viewModel.RootFolder == null)
-  {
-    <button @onclick="OpenRootFolderSelect"> CLICK HERE TO SELECT FOLDER </button>
-  }
-  else
-  {
-    <FluentTreeView ref="@FilesTree"
-                    Items="@Items" 
-                    @bind-SelectedItem="@SelectedItem" 
-                    OnSelectedChange="@HandleSelectedChanged"
-                    LazyLoadItems="true">
-    </FluentTreeView>
-  }
-</div>
+@if (_viewModel.RootFolder != null)
+{
+  <FluentTreeView Items="@Items"
+                  @bind-SelectedItem="@SelectedItem"
+                  OnSelectedChange="@HandleSelectedChanged"
+                  LazyLoadItems="true">
+  </FluentTreeView>
+}
 
 @code {
-  private FluentTreeView FilesTree;
-  private IEnumerable<ITreeViewItem>? Items = new List<ITreeViewItem>();
+  private IEnumerable<ITreeViewItem> Items = new List<ITreeViewItem>();
   private ITreeViewItem SelectedItem;
 
-  private void OpenRootFolderSelect()
+  private void OpenRootFolderSelect(string cabinetName)
   {
-    //Temporarily(?) locked to appdata folder
-    _viewModel.SetRootFolder();
+    _viewModel.SetRootFolder(cabinetName);
   }
   protected override async Task OnInitializedAsync()
   {
-    this.Items = await _viewModel.GetDirectoryTreeAsync();
+    this.Items = _viewModel.GetDirectoryTree();
 
     this._viewModel.PropertyChanged += HandlePropertyChanged;
     await base.OnInitializedAsync();
@@ -42,44 +33,25 @@
      || e.PropertyName == nameof(this._viewModel.CurrentFolder))
     {
       this.RefreshTree();
-      if (this._viewModel.CurrentFile != null) this.SelectedItem = this.FindSelectedItem(this.Items);
       this.StateHasChanged();
     }
   }
 
   private void RefreshTree()
   {
-    var promise = _viewModel.GetDirectoryTreeAsync();
-    promise.Wait();
-    this.Items = promise.Result;
-  }
-
-  private ITreeViewItem FindSelectedItem(IEnumerable<ITreeViewItem> items)
-  {
-    if(this._viewModel.CurrentFile != null)
-      foreach (var item in items)
-      {
-        if(item.Id == this._viewModel.CurrentFile.Path)
-        {
-          return item;
-        }
-        if (this._viewModel.CurrentFile.Path.StartsWith(item.Id))
-        {
-          var result = FindSelectedItem(item.Items);
-          if(result != null) return result;
-        }
-      }
-    return null;
+    this.Items = _viewModel.GetDirectoryTree();
   }
 
   private void HandleSelectedChanged(FluentTreeItem item)
   {
-    var path = item.Id.Substring(0, item.Id.LastIndexOf(System.IO.Path.DirectorySeparatorChar));
-    if(this._viewModel.CurrentFolder.Path != path)
+    var path = item.IconCollapsed.Name.Equals("Folder", StringComparison.OrdinalIgnoreCase)
+    ? item.Id
+    : item.Id.Substring(0, item.Id.LastIndexOf(System.IO.Path.DirectorySeparatorChar));
+    if (this._viewModel.CurrentFolder.Path != path)
     {
       this._viewModel.SetCurrentFolder(path);
     }
-    if(!string.IsNullOrEmpty(item.Text))
+    if (!string.IsNullOrEmpty(item.Text))
     {
       this._viewModel.SetCurrentFile(item.Text).ConfigureAwait(false);
     }

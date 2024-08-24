@@ -9,7 +9,7 @@ public class ViewModelTests_IsFolderOpen
   public void ViewModel_SaysFolderNotOpen_WhenRootFolderIsNull()
   {
     // Arrange
-    var SUT = new ViewModel(new FileService(), new LinkService(), new SearchService(), new GitService());
+    var SUT = new MarkdownViewModel(new FileService(), new LinkService(), new SearchService(), new GitService());
     var expectedValue = false;
 
     // Act
@@ -24,7 +24,7 @@ public class ViewModelTests_IsFolderOpen
   {
     // Arrange    
     var FS = new FileService();
-    var SUT = new ViewModel(FS, new LinkService(), new SearchService(), new GitService());
+    var SUT = new MarkdownViewModel(FS, new LinkService(), new SearchService(), new GitService());
     var expectedValue = true;
 
     SUT.SetRootFolder();

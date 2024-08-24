@@ -1,25 +1,24 @@
 ﻿using Microsoft.FluentUI.AspNetCore.Components;
 
 using MkDownOffice.Contracts;
+using MkDownOffice.Services;
 
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.IO;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 
 namespace MkDownOffice.Models;
 
-public class ViewModel : INotifyPropertyChanged
+public class MarkdownViewModel : ViewModelBase
 {
   private readonly IFileService _fileService;
   private readonly ILinkService _linkService;
   private readonly ISearchService _searchService;
   private readonly IGitService _gitService;
 
-  public ViewModel(
+  public MarkdownViewModel(
     IFileService fileService,
     ILinkService linkService,
     ISearchService searchService,
@@ -56,14 +55,27 @@ public class ViewModel : INotifyPropertyChanged
   public Folder RootFolder
   {
     get => this._rootFolder;
-    set => this.SetValue(ref this._rootFolder, value);
+    set
+    {
+      if (this._rootFolder == value) return;
+      // security to prevent access to unwanted folders.
+      if (!value.Path.StartsWith(System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData))) return;
+      this.SetValue(ref this._rootFolder, value);
+    }
   }
 
   private Folder _currentFolder;
   public Folder CurrentFolder
   {
     get => this._currentFolder;
-    set => this.SetValue(ref this._currentFolder, value);
+    set
+    {
+      if (this._rootFolder == null) return;
+      if (this._currentFolder == value) return;
+      // security to prevent access to unwanted folders.
+      if (!value.Path.StartsWith(this._rootFolder.Path)) return;
+      this.SetValue(ref this._currentFolder, value);
+    }
   }
 
   private MarkdownFile _currentFile;
@@ -80,8 +92,10 @@ public class ViewModel : INotifyPropertyChanged
     set => this.SetValue(ref this._currentMenu, value);
   }
 
-  public void SetRootFolder(string rootFolderName = "MkDownOffice", string projectName = "Default")
+  public void SetRootFolder(string projectName = "Default", bool isUnitTest = false)
   {
+    string rootFolderName = CabinetService.AppDataFolderName;
+    if (isUnitTest) rootFolderName = CabinetService.AppDataFolderName + "_Test";
     try
     {
       var path = Path.Combine(
@@ -120,9 +134,10 @@ public class ViewModel : INotifyPropertyChanged
 
   public void CloseRootFolder()
   {
-    this.RootFolder = null;
-    this.CurrentFolder = null;
-    this.CurrentFile = null;
+    // use SetValue to trigger PropertyChanged event and avoid folder path checks.
+    this.SetValue(ref this._rootFolder, null, nameof(this.RootFolder));
+    this.SetValue(ref this._currentFolder, null, nameof(this.CurrentFolder));
+    this.SetValue(ref this._currentFile, null, nameof(this.CurrentFile));
   }
 
   public void SetCurrentFolder(string name)
@@ -157,16 +172,20 @@ public class ViewModel : INotifyPropertyChanged
     this.CurrentFolder = tempFolder;
   }
 
-  public async Task<List<ITreeViewItem>> GetDirectoryTreeAsync(string path = "")
+  public void SetCurrentFolderToRoot()
   {
-    if (this.RootFolder == null) return [];
+    this.CurrentFolder = this.RootFolder;
+  }
+
+  public List<ITreeViewItem> GetDirectoryTree(string path = "")
+  {
+    if (this.CurrentFolder == null) return [];
     if (string.IsNullOrEmpty(path))
     {
-      path = this.RootFolder.Path;
+      path = this.CurrentFolder.Path;
     }
-    var found = await this._fileService.GetDirectoryTreeAsync(path);
-    if (this.CurrentFolder != null)
-      found = this.ExpandTree(this.CurrentFolder.Path, found);
+    var found = this._fileService.GetDirectoryTree(path);
+    found = this.ExpandTree(this.CurrentFolder.Path, found);
 
     return found;
   }
@@ -187,17 +206,26 @@ public class ViewModel : INotifyPropertyChanged
     return tree;
   }
 
-  public List<string> GetBreadcrumbs()
+  public List<string> GetBreadcrumbsForCurrentFolder()
   {
     if (this.CurrentFolder == null) return [];
 
     var Crumbs = new List<string>();
     var dirInfo = new DirectoryInfo(this.CurrentFolder.Path);
-    if (this.CurrentFile != null)
+    while (dirInfo.Name != this.RootFolder.Name)
     {
-      var fileInfo = new FileInfo(this.CurrentFile.Path);
-      dirInfo = fileInfo.Directory;
+      Crumbs.Add(dirInfo.Name);
+      dirInfo = dirInfo.Parent;
     }
+    Crumbs.Add(this.RootFolder.Name);
+    return Crumbs;
+  }
+  public List<string> GetBreadcrumbsForCurrentFile()
+  {
+    if (this.CurrentFile == null) return [];
+
+    var Crumbs = new List<string>();
+    var dirInfo = new DirectoryInfo(this.CurrentFile.Path.Substring(0, this.CurrentFile.Path.LastIndexOf(Path.DirectorySeparatorChar)));
     while (dirInfo.Name != this.RootFolder.Name)
     {
       Crumbs.Add(dirInfo.Name);
@@ -231,17 +259,5 @@ public class ViewModel : INotifyPropertyChanged
     return Markdig.Markdown.ToHtml(this.CurrentFile.Markdown);
   }
 
-  #region INotifyPropertyChanged
-  public event PropertyChangedEventHandler PropertyChanged;
-  protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
-  {
-    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-  }
-  protected void SetValue<T>(ref T backingField, T value, [CallerMemberName] string propertyName = null)
-  {
-    if (EqualityComparer<T>.Default.Equals(backingField, value)) return;
-    backingField = value;
-    this.OnPropertyChanged(propertyName);
-  }
-  #endregion INotifyPropertyChanged
+
 }

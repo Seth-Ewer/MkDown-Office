@@ -1,0 +1,42 @@
+@using MkDownOffice.Models
+@using System.ComponentModel
+@inject MarkdownViewModel _viewModel
+
+
+<div>
+
+  <FluentBreadcrumb>
+    @foreach (var folder in crumbs)
+    {
+      <FluentBreadcrumbItem @onclick="() => _viewModel.SetCurrentFolderToParent(folder.Index)">
+        @folder.Name
+      </FluentBreadcrumbItem>
+    }
+  </FluentBreadcrumb>
+
+</div>
+
+@code {
+  List<Breadcrumb> crumbs = new List<Breadcrumb>();
+  string fileName => this._viewModel.CurrentFile?.Name ?? "";
+
+  protected override async Task OnInitializedAsync()
+  {
+    this._viewModel.PropertyChanged += HandlePropertyChanged;
+    await base.OnInitializedAsync();
+  }
+
+  private void HandlePropertyChanged(object sender, PropertyChangedEventArgs e)
+  {
+    if (e.PropertyName == nameof(this._viewModel.CurrentFolder))
+    {
+      crumbs = _viewModel.GetBreadcrumbsForCurrentFolder().Select((value, i) => new Breadcrumb() { Name = value, Index = i }).Reverse().ToList();
+    }
+    this.StateHasChanged();
+  }
+
+  ~BreadcrumbMenu()
+  {
+    this._viewModel.PropertyChanged -= HandlePropertyChanged;
+  }
+}

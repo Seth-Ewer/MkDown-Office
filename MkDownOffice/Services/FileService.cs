@@ -9,7 +9,6 @@ using System.Linq;
 using System.Threading.Tasks;
 
 namespace MkDownOffice.Services;
-
 public class FileService : IFileService
 {
   public async Task<Folder> OpenFolderAsync(string path)
@@ -60,7 +59,7 @@ public class FileService : IFileService
   private static readonly Icon IconExpanded = new Icons.Regular.Size20.FolderOpen();
   private static readonly Icon IconFile = new Icons.Regular.Size20.Document();
   private static readonly string[] MdExtensions = [".md", ".mkd", ".mdwn", ".mdown", ".mdtxt", ".mdtext", ".markdown", ".text"];
-  public async Task<List<ITreeViewItem>> GetDirectoryTreeAsync(string path)
+  public List<ITreeViewItem> GetDirectoryTree(string path)
   {
     var root = new DirectoryInfo(path);
     if (!root.Exists) throw new DirectoryNotFoundException();
@@ -71,7 +70,6 @@ public class FileService : IFileService
       var item = new TreeViewItem(folder.FullName, folder.Name);
       item.IconCollapsed = IconCollapsed;
       item.IconExpanded = IconExpanded;
-      item.Items = await this.GetDirectoryTreeAsync(folder.FullName);
       children.Add(item);
     }
     foreach (var file in root.GetFiles().OrderBy(x => x.Name))

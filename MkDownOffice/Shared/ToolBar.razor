@@ -1,5 +1,5 @@
 @using MkDownOffice.Models
-@inject ViewModel _viewModel
+@inject MarkdownViewModel _viewModel
 
 
 <!--
@@ -18,21 +18,21 @@
 
 <FluentAppBar Style="height:100%; background-color: var(--neutral-layer-2);">
 
-  <FluentAppBarItem Href="/AppBarDefault"
+  <FluentAppBarItem Href="/"
                     Match="NavLinkMatch.All"
                     IconRest="DocumentFolderIcon()"
                     IconActive="DocumentFolderIcon(active: true)"
                     Text="Documents" />
-  <FluentAppBarItem Href="/AppBar"
+  <FluentAppBarItem Href="/search"
                     IconRest="SearchIcon()"
                     IconActive="SearchIcon(active: true)"
                     Text="Search" />
 
-  <FluentAppBarItem Href="/StructuredLogs"
+  <FluentAppBarItem Href="/media"
                     IconRest="ImageIcon()"
                     IconActive="ImageIcon(active: true)"
                     Text="Media"/>
-  <FluentAppBarItem Href="/Traces"
+  <FluentAppBarItem Href="/git"
                     IconRest="GitIcon()"
                     IconActive="GitIcon(active: true)"
                     Text="Git History" />

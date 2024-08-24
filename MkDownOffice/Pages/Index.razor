@@ -2,31 +2,50 @@
 @using MkDownOffice.Models
 @using MkDownOffice.Shared
 @using System.ComponentModel
-@inject NavigationManager Navigation
-@inject ViewModel _viewModel
 
-<FluentBodyContent>
-  Select a markdown file
-</FluentBodyContent>
+<FluentLabel>Select a Cabinet to open, or create a new one.</FluentLabel>
+
+<FluentGrid Spacing="@Spacing" AdaptiveRendering="true" Justify="@Justification">
+
+  @foreach (var cabinet in cabinets)
+  {
+    <FluentCard Title="@cabinet" @onclick="() => this.OnCardClick(cabinet)">
+        <FluentLabel>Click to open</FluentLabel>
+    </FluentCard>
+  }
+
+</FluentGrid>
 
 @code {
 
+  [Inject] NavigationManager Navigation { get; set; }
+  [Inject] CabinetsViewModel ViewModel { get; set; }
+
+  JustifyContent Justification = JustifyContent.SpaceBetween;
+  int Spacing = 3;
+
+  List<string> cabinets = new List<string>();
+
   protected override async Task OnInitializedAsync()
   {
-    this._viewModel.PropertyChanged += HandlePropertyChanged;
+    this.cabinets = this.ViewModel.CabinetNames;
+    this.ViewModel.PropertyChanged += HandlePropertyChanged;
     await base.OnInitializedAsync();  
   }
 
   private void HandlePropertyChanged(object sender, PropertyChangedEventArgs e)
   {
-    if(e.PropertyName == nameof(this._viewModel.CurrentFile))
-    {
-      Navigation.NavigateTo($"/md/{this._viewModel.CurrentFile?.Name}");
-    }
+    this.cabinets = this.ViewModel.CabinetNames;
+    this.StateHasChanged();
+  }
+
+  private void OnCardClick(string cabinet)
+  {
+    Navigation.NavigateTo($"/md/{cabinet}");
   }
 
  ~Index()
   {
-    this._viewModel.PropertyChanged -= HandlePropertyChanged;
+    this.ViewModel.PropertyChanged -= HandlePropertyChanged;
   }
 }

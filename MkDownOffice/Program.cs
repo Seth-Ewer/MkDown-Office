@@ -1,13 +1,13 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.FluentUI.AspNetCore.Components;
 
 using MkDownOffice.Contracts;
 using MkDownOffice.Models;
 using MkDownOffice.Services;
 
-using Microsoft.FluentUI.AspNetCore.Components;
-
 using Photino.Blazor;
 using Photino.NET;
+
 using System;
 
 namespace MkDownOffice
@@ -25,12 +25,14 @@ namespace MkDownOffice
       appBuilder.Services.AddFluentUIComponents();
 
       // Register Core Application Services
+      appBuilder.Services.AddSingleton<ICabinetService, CabinetService>();
       appBuilder.Services.AddSingleton<IFileService, FileService>();
       appBuilder.Services.AddSingleton<ILinkService, LinkService>();
       appBuilder.Services.AddSingleton<ISearchService, SearchService>();
       appBuilder.Services.AddSingleton<IGitService, GitService>();
 
-      appBuilder.Services.AddSingleton<ViewModel>();
+      appBuilder.Services.AddSingleton<CabinetsViewModel>();
+      appBuilder.Services.AddSingleton<MarkdownViewModel>();
 
 
       // register root component and selector
@@ -43,7 +45,7 @@ namespace MkDownOffice
           .SetIconFile("favicon.ico")
           .SetTitle("MkDown Office")
           .SetDevToolsEnabled(true);
-      
+
       Program.MainWindow = app.MainWindow;
 
       AppDomain.CurrentDomain.UnhandledException += (sender, error) =>

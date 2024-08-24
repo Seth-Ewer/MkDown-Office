@@ -1,12 +1,12 @@
-﻿@page "/git/{*pageRoute}"
+﻿@page "/git"
 @using MkDownOffice.Models
 @using MkDownOffice.Shared
 @using System.ComponentModel
-@inject NavigationManager Navigation
-@inject ViewModel _viewModel
 
 <h3>Git</h3>
 
 @code {
 
+  [Inject] NavigationManager Navigation { get; set; }
+  [Inject] MarkdownViewModel ViewModel { get; set; }
 }

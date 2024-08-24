@@ -2,44 +2,52 @@
 @using MkDownOffice.Models
 @using MkDownOffice.Shared
 @using System.ComponentModel
-@inject NavigationManager Navigation
-@inject ViewModel _viewModel
 
-  <!-- Inside Component -->
-      <div style="height:100%">
-        <MarkdownEditor @ref="mdEdit" 
-                        MinHeight="300px"
-                        MaxHeight="@defaultHeight"
-                        @bind-Value="@currentMarkdown" 
-                        />
-      </div>
+<!-- Inside Component -->
+<div style="height:100%; width:100%">
+  <FluentLabel Alignment="HorizontalAlignment.Right">@path </FluentLabel>
+  <MarkdownEditor @ref="mdEdit"
+                  MinHeight="300px"
+                  MaxHeight="@defaultHeight"
+                  @bind-Value="@currentMarkdown" />
+</div>
 
 @code {
+
+  [Inject] NavigationManager Navigation { get; set; }
+  [Inject] MarkdownViewModel ViewModel { get; set; }
+
   [Parameter] public string pageRoute { get; set; }
-  string defaultHeight = $"800px";
+
   MarkdownEditor mdEdit;
+  string defaultHeight = $"800px";
   bool isManualUpdate = false;
+  string path => this.ViewModel.CurrentFile?
+                                .Path
+                                .Replace(this.ViewModel.RootFolder.Path, "")
+                                .TrimStart(System.IO.Path.DirectorySeparatorChar)
+                                .Replace(System.IO.Path.DirectorySeparatorChar.ToString(), " ▸ ") ?? "";
   string currentMarkdown
   {
-    get => this._viewModel.CurrentFile?.Markdown ?? "";
+    get => this.ViewModel.CurrentFile?.Markdown ?? "";
     set
     {
-      if (!this._viewModel.IsFolderOpen || isManualUpdate) return;
-      this._viewModel.CurrentFile.Markdown = value; 
+      if (!this.ViewModel.IsFolderOpen || isManualUpdate) return;
+      this.ViewModel.CurrentFile.Markdown = value;
     }
   }
   protected override async Task OnInitializedAsync()
   {
 
-    this.defaultHeight = $"{this._viewModel.WindowHeight}px";
-    this._viewModel.PropertyChanged += HandlePropertyChanged;
+    this.defaultHeight = $"{this.ViewModel.WindowHeight}px";
+    this.ViewModel.PropertyChanged += HandlePropertyChanged;
 
-    await base.OnInitializedAsync();  
+    await base.OnInitializedAsync();
   }
 
   protected override async Task OnParametersSetAsync()
   {
-    if(!string.IsNullOrEmpty(pageRoute) && this.mdEdit!=null)
+    if (!string.IsNullOrEmpty(pageRoute) && this.mdEdit != null)
     {
       this.isManualUpdate = true;
       await this.mdEdit.SetValueAsync(this.currentMarkdown);
@@ -50,17 +58,18 @@
 
   private void HandlePropertyChanged(object sender, PropertyChangedEventArgs e)
   {
-    if(e.PropertyName == nameof(this._viewModel.CurrentFile))
+    if (e.PropertyName == nameof(this.ViewModel.CurrentFile))
     {
-      Navigation.NavigateTo($"/md/{this._viewModel.CurrentFile?.Path}");
+      Navigation.NavigateTo($"/md/{this.ViewModel.CurrentFile?.Path}");
     }
   }
 
   ~MdEditor()
   {
-    this._viewModel.PropertyChanged -= HandlePropertyChanged;
-    if (this._viewModel.CurrentFile.HasChanges) {
-      var promise = this._viewModel.SaveAsync();
+    this.ViewModel.PropertyChanged -= HandlePropertyChanged;
+    if (this.ViewModel.CurrentFile.HasChanges)
+    {
+      var promise = this.ViewModel.SaveAsync();
       promise.Wait();
     }
   }

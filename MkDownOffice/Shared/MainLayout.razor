@@ -1,18 +1,18 @@
 ﻿@inherits LayoutComponentBase
 @using MkDownOffice.Models
 @using System.ComponentModel
-@inject ViewModel _viewModel
+@inject MarkdownViewModel _viewModel
 
 <FluentDesignTheme Mode="DesignThemeModes.Dark" />
 
-<!-- 
+<!--
 
 <FluentMainLayout>
   <Header>
     <TopMenu />
   </Header>
   <Body>
-      @Body
+@Body
   </Body>
   <NavMenuContent>
     <NavMenu />
@@ -21,33 +21,37 @@
 
 -->
 
-<FluentLayout Style="height:100vh;">
+<FluentLayout Style="height:100vh;width:100%">
 
   <FluentHeader>
     MkDownOffice
     <FluentSpacer />
-  </FluentHeader>  
+  </FluentHeader>
 
-  <FluentSplitter Orientation="Orientation.Horizontal"
-                  BarSize="6"
-                  Panel1MinSize="15%"
-                  Panel1Size="15%"
-                  Panel2MinSize="50px"
-                  Style="height:100%">
-    <Panel1>
-      <FluentStack Orientation="Orientation.Horizontal" 
-                   HorizontalGap="4"
-                   Style="height:100%; background-color: var(--neutral-layer-1)">
-        <ToolBar />
-        <NavMenu />
-      </FluentStack>
-    </Panel1>
-    <Panel2>
-      <TopMenu />
-      @Body
-    </Panel2>
+  <FluentStack Orientation="Orientation.Horizontal"
+               HorizontalGap="4"
+               Style="width:100%; height:100%; background-color: var(--neutral-layer-1)">
+    <ToolBar />
+    <FluentStack Orientation="Orientation.Vertical"
+                 VerticalGap="4"
+                 Style="width:100%; height:100%">
+      <BreadcrumbMenu />
+      <FluentSplitter Orientation="Orientation.Horizontal"
+                      BarSize="6"
+                      Panel1MinSize="20%"
+                      Panel1Size="20%"
+                      Panel2MinSize="200px"
+                      Style="height:100%; width:100%">
+        <Panel1>
+          <NavMenu />
+        </Panel1>
+        <Panel2>
+          @Body
+        </Panel2>
 
-  </FluentSplitter>
+      </FluentSplitter>
+    </FluentStack>
+  </FluentStack>
 
 </FluentLayout>
 
