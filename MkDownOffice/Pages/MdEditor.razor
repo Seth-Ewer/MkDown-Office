@@ -15,18 +15,23 @@
 @code {
 
   [Inject] NavigationManager Navigation { get; set; }
+
   [Inject] MarkdownViewModel ViewModel { get; set; }
 
   [Parameter] public string pageRoute { get; set; }
 
   MarkdownEditor mdEdit;
+
   string defaultHeight = $"800px";
+
   bool isManualUpdate = false;
+
   string path => this.ViewModel.CurrentFile?
                                 .Path
                                 .Replace(this.ViewModel.RootFolder.Path, "")
                                 .TrimStart(System.IO.Path.DirectorySeparatorChar)
                                 .Replace(System.IO.Path.DirectorySeparatorChar.ToString(), " ▸ ") ?? "";
+
   string currentMarkdown
   {
     get => this.ViewModel.CurrentFile?.Markdown ?? "";
@@ -36,9 +41,9 @@
       this.ViewModel.CurrentFile.Markdown = value;
     }
   }
+
   protected override async Task OnInitializedAsync()
   {
-
     this.defaultHeight = $"{this.ViewModel.WindowHeight}px";
     this.ViewModel.PropertyChanged += HandlePropertyChanged;
 

@@ -14,12 +14,12 @@ public class ViewModelTests_RootFolder
   private readonly Mock<IGitService> _mockGitService;
   private readonly MarkdownViewModel _viewModel;
   private readonly string appDatapath = System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData);
-  private readonly string unitTestFolderName = CabinetService.AppDataFolderName + "_Test";
-  private readonly string unitTestPath = Path.Combine(System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData), CabinetService.AppDataFolderName + "_Test");
+  private readonly string unitTestFolderName = CabinetService.ApplicationDataFolderName + "_Test";
+  private readonly string unitTestPath = Path.Combine(System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData), CabinetService.ApplicationDataFolderName + "_Test");
   private readonly string unitTestProjectPath = Path.Combine(
     System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData),
-    CabinetService.AppDataFolderName + "_Test",
-    CabinetService.AppDataFolderName + "_Test");
+    CabinetService.ApplicationDataFolderName + "_Test",
+    CabinetService.ApplicationDataFolderName + "_Test");
 
 
   public ViewModelTests_RootFolder()

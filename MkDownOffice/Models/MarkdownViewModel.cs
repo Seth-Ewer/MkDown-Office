@@ -94,8 +94,8 @@ public class MarkdownViewModel : ViewModelBase
 
   public void SetRootFolder(string projectName = "Default", bool isUnitTest = false)
   {
-    string rootFolderName = CabinetService.AppDataFolderName;
-    if (isUnitTest) rootFolderName = CabinetService.AppDataFolderName + "_Test";
+    string rootFolderName = CabinetService.ApplicationDataFolderName;
+    if (isUnitTest) rootFolderName = CabinetService.ApplicationDataFolderName + "_Test";
     try
     {
       var path = Path.Combine(

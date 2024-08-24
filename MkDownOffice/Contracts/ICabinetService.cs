@@ -1,8 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using MkDownOffice.Models;
+
+using System.Collections.Generic;
 
 namespace MkDownOffice.Contracts;
 
 public interface ICabinetService
 {
-  List<string> GetCabinetNames();
+  List<Cabinet> GetCabinetNames();
 }

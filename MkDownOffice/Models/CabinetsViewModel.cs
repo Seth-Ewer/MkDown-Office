@@ -7,8 +7,8 @@ namespace MkDownOffice.Models;
 public class CabinetsViewModel : ViewModelBase
 {
   private readonly ICabinetService _cabinetService;
-  private List<string> _cabinetNames = new List<string>();
-  public List<string> CabinetNames
+  private List<Cabinet> _cabinetNames = new List<Cabinet>();
+  public List<Cabinet> CabinetNames
   {
     get => this._cabinetNames;
   }

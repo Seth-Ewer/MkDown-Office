@@ -3,15 +3,32 @@
 @using MkDownOffice.Shared
 @using System.ComponentModel
 
-<FluentLabel>Select a Cabinet to open, or create a new one.</FluentLabel>
+<p>
+  <FluentLabel>Select a Cabinet to open, or create a new one.</FluentLabel>
+
+</p>
 
 <FluentGrid Spacing="@Spacing" AdaptiveRendering="true" Justify="@Justification">
 
   @foreach (var cabinet in cabinets)
   {
-    <FluentCard Title="@cabinet" @onclick="() => this.OnCardClick(cabinet)">
-        <FluentLabel>Click to open</FluentLabel>
-    </FluentCard>
+    <FluentGridItem xs="6" sm="3" xl="2">
+      <FluentCard Title="@cabinet" @onclick="() => this.OnCardClick(cabinet)">
+        <FluentStack Orientation="@Orientation.Vertical"
+                     HorizontalAlignment="@HorizontalAlignment.Center"
+                     VerticalAlignment="@VerticalAlignment.Top">
+          <FluentIcon Value="@CabinetIcon" />
+          <FluentLabel Weight="@FontWeight.Bold">@cabinet.Name</FluentLabel>
+
+          <div style="display: flex; width:100%">
+            <!--<FluentBadge>Created: @cabinet.Created.Humanize()</FluentBadge>-->
+            <FluentBadge Circular="true" Appearance="Appearance.Neutral">@cabinet.Modified.Humanize()</FluentBadge>
+            <FluentSpacer />
+            <FluentIcon Value="@DeleteCabinetIcon" />
+          </div>
+        </FluentStack>
+      </FluentCard>
+    </FluentGridItem>
   }
 
 </FluentGrid>
@@ -21,16 +38,18 @@
   [Inject] NavigationManager Navigation { get; set; }
   [Inject] CabinetsViewModel ViewModel { get; set; }
 
-  JustifyContent Justification = JustifyContent.SpaceBetween;
-  int Spacing = 3;
+  JustifyContent Justification = JustifyContent.SpaceEvenly;
+  int Spacing = 1;
+  Icon CabinetIcon = new Icons.Filled.Size48.AppFolder();
+  Icon DeleteCabinetIcon = new Icons.Regular.Size12.Delete();
 
-  List<string> cabinets = new List<string>();
+  List<Cabinet> cabinets = new List<Cabinet>();
 
   protected override async Task OnInitializedAsync()
   {
     this.cabinets = this.ViewModel.CabinetNames;
     this.ViewModel.PropertyChanged += HandlePropertyChanged;
-    await base.OnInitializedAsync();  
+    await base.OnInitializedAsync();
   }
 
   private void HandlePropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -39,12 +58,12 @@
     this.StateHasChanged();
   }
 
-  private void OnCardClick(string cabinet)
+  private void OnCardClick(Cabinet selected)
   {
-    Navigation.NavigateTo($"/md/{cabinet}");
+    Navigation.NavigateTo($"/md/{selected.Name}");
   }
 
- ~Index()
+  ~Index()
   {
     this.ViewModel.PropertyChanged -= HandlePropertyChanged;
   }

@@ -14,8 +14,8 @@ public class ViewModelTests_CurrentFile
   private readonly Mock<IGitService> _mockGitService;
   private readonly MarkdownViewModel _viewModel;
   private readonly string appDatapath = System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData);
-  private readonly string unitTestFolderName = CabinetService.AppDataFolderName + "_Test";
-  private readonly string unitTestPath = Path.Combine(System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData), CabinetService.AppDataFolderName + "_Test");
+  private readonly string unitTestFolderName = CabinetService.ApplicationDataFolderName + "_Test";
+  private readonly string unitTestPath = Path.Combine(System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData), CabinetService.ApplicationDataFolderName + "_Test");
 
   public ViewModelTests_CurrentFile()
   {
